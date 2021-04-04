@@ -14,6 +14,8 @@ namespace GLFW {
         virtual bool IsOpen() override;
 
         virtual void MakeContextCurrent() override;
+
+        GLFWwindow* GetGlfwWindow() const;
     };
 
 }

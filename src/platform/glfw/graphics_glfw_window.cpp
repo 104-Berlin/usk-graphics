@@ -77,3 +77,8 @@ void GLFWWindow::MakeContextCurrent()
     }
     glfwMakeContextCurrent(fGLFWWindow);
 }
+
+GLFWwindow* GLFWWindow::GetGlfwWindow() const
+{
+    return fGLFWWindow;
+}
