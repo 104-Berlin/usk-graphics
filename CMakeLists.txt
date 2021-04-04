@@ -20,6 +20,16 @@ add_compile_definitions(G_UNI)
 endif()
 
 
+add_library(ImGui STATIC    deps/imgui/imgui.cpp
+                            deps/imgui/imgui_demo.cpp
+                            deps/imgui/imgui_draw.cpp
+                            deps/imgui/imgui_widgets.cpp
+                            deps/imgui/imgui_tables.cpp)
+
+target_include_directories(ImGui PUBLIC deps/imgui)
+
+
+
 add_subdirectory(deps/glm)
 add_subdirectory(src/interface)
 
@@ -36,7 +46,10 @@ target_link_libraries(GGLFW GInterface)
 
 
 
-add_executable(Main src/main.cpp)
+add_executable(Main     src/main.cpp
+                        deps/imgui/backends/imgui_impl_glfw.cpp
+                        deps/imgui/backends/imgui_impl_opengl3.cpp)
 
 target_link_libraries(Main GOpenGL)
 target_link_libraries(Main GGLFW)
+target_link_libraries(Main ImGui)

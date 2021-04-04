@@ -1,5 +1,8 @@
 #include "platform/opengl/graphics_opengl.h"
 #include "platform/glfw/graphics_glfw.h"
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 
 using namespace Graphics;
 
@@ -27,54 +30,66 @@ void main()
 
 int main()
 {
-    GLFW::GLFWWindow window;
+    GLFW::GLFWWindow* window = new GLFW::GLFWWindow();
     GL::GLContext mainContext;
-    window.Create("My Test window", 1270, 720);
+    window->Create("My Test window", 1270, 720);
     mainContext.Init((void*) glfwGetProcAddress);
 
-    std::vector<float> vertex_data = {
-        -0.5f, 0.5f, 0.0f,
-        0.0f, -0.5f, 0.0f,
-        0.5f,  0.5f, 0.0f  
-    };
 
-    std::vector<unsigned int> index_data = {
-        0, 1, 2
-    };
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    GL::GLShader shader;
-    shader.Compile(vertexSource, fragmentSource);
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer backends
+    G_RENDERCMD1(window, {
+        ImGui_ImplGlfw_InitForOpenGL(window->GetGlfwWindow(), true);
+        ImGui_ImplOpenGL3_Init();
+    })
 
 
-    GL::GLVertexArray va;
-    va.Bind();
-    
-    GL::GLVertexBuffer* vb = new GL::GLVertexBuffer();
-    vb->SetData((unsigned char*) vertex_data.data(), vertex_data.size() * sizeof(float));
-    vb->SetLayout({GBufferElement(GShaderDataType::Float3, "POSITION")});
-
-    GL::GLIndexBuffer* ib = new GL::GLIndexBuffer();
-    ib->SetData((unsigned char*) index_data.data(), index_data.size() * sizeof(unsigned int), sizeof(unsigned int));
-
-    va.AddVertexBuffer(vb);
-    va.SetIndexBuffer(ib);
-
-    while (window.IsOpen())
+    while (window->IsOpen())
     {
-        window.PollEvents();
+        window->PollEvents();
 
-        mainContext.Clear(0, 0, 0);
         
-        shader.Bind();
-        va.Bind();
-        G_RENDERCMD({
-            glCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
+
+        G_RENDERCMD1(window, {
+            // Start the Dear ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            ImGui::Begin("HEllo ImGui");
+
+            ImGui::End();
+
+            ImGui::Render();
+            int display_w;
+            int display_h;
+            glfwGetFramebufferSize(window->GetGlfwWindow(), &display_w, &display_h);
+            glViewport(0, 0, display_w, display_h);
+            glClearColor(0, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         })
 
 
         // Swap the renderer
         Renderer::ERenderCommandQueue::Get().Execute();
-        window.SwapBuffer();
+        window->SwapBuffer();
     }
-    window.Destroy();
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    window->Destroy();
+    delete window;
 }
