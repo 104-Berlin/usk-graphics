@@ -1,5 +1,7 @@
-
 #include "graphics_opengl.h"
+#if G_WIN
+#include <assert.h>
+#endif
 
 char const* gl_error_string(GLenum const err) 
 {

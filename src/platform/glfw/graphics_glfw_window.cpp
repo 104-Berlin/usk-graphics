@@ -20,8 +20,8 @@ void GLFWWindow::Create(const char* title, int width, int height)
     // GL 3.0 + GLSL 130
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
     fGLFWWindow = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -31,10 +31,7 @@ void GLFWWindow::Create(const char* title, int width, int height)
         return;
     }
 
-    glfwMakeContextCurrent(fGLFWWindow);
-
-
-    
+    MakeContextCurrent();
 }
 
 void GLFWWindow::Destroy() 

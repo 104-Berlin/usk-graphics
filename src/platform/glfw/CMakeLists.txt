@@ -3,5 +3,6 @@ cmake_minimum_required(VERSION 3.15)
 
 add_subdirectory(glfw)
 
-add_library(GGLFW SHARED graphics_glfw_window.cpp)
+add_library(GGLFW STATIC graphics_glfw_window.cpp)
+
 target_link_libraries(GGLFW glfw)
