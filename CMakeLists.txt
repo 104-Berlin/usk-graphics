@@ -11,6 +11,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
+if(APPLE)
+add_compile_definitions(G_MAC)
+elseif(WIN32)
+add_compile_definitions(G_WIN)
+else()
+add_compile_definitions(G_UNI)
+endif()
+
+
 add_subdirectory(src/interface)
 add_subdirectory(src/renderer)
 
