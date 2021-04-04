@@ -4,6 +4,8 @@ namespace Graphics {
 
     class GWindow
     {
+    public:
+
         virtual void Create(const char* title, int width, int height) = 0;
         virtual void Destroy() = 0;
         virtual void SwapBuffer() = 0;

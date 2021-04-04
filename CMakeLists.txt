@@ -12,11 +12,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
 add_subdirectory(src/interface)
+add_subdirectory(src/renderer)
 
 add_subdirectory(src/platform/opengl)
 add_subdirectory(src/platform/glfw)
 
 target_link_libraries(GOpenGL GInterface)
+target_link_libraries(GOpenGL GRenderer)
 target_link_libraries(GGLFW GInterface)
 
 
