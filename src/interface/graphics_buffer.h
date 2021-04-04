@@ -185,4 +185,28 @@ namespace Graphics {
 		virtual void SetIndexBuffer(GIndexBuffer* indexBuffer) = 0;
     };
 
+	enum class GFramebufferFormat
+	{
+		None = 0,
+		RGBA8 = 1,
+		RGBA16F = 2
+	};
+
+	class GFrameBuffer
+	{
+	public:
+		virtual ~GFrameBuffer() = default;
+
+		virtual void Resize(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format) = 0;
+
+		virtual unsigned int GetWidth() const = 0;
+		virtual unsigned int GetHeight() const = 0;
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
+
+		virtual unsigned int GetColorAttachment() const = 0;
+		virtual unsigned int GetDepthAttachment() const = 0;
+	};
+
 }

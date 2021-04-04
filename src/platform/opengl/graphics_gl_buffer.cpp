@@ -184,3 +184,124 @@ void GLVertexArray::SetIndexBuffer(Graphics::GIndexBuffer* indexBuffer)
     }
     fIndexBuffer = indexBuffer;
 }
+
+GLFrameBuffer::GLFrameBuffer(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format) 
+    : fWidth(0), fHeight(0), fFormat(Graphics::GFramebufferFormat::None), fRenderId(0), fColorAttachment(0), fDepthAttachment(0)
+{
+    Resize(width, height, format);
+}
+
+GLFrameBuffer::~GLFrameBuffer() 
+{
+    GLuint ID = fRenderId;
+    GLuint colorAttach = fColorAttachment;
+    GLuint depthAttach = fDepthAttachment;
+    G_RENDERCMD3(ID, colorAttach, depthAttach, {
+        glCall(glDeleteFramebuffers(1, &ID));
+		glCall(glDeleteTextures(1, &colorAttach));
+		glCall(glDeleteTextures(1, &depthAttach));
+    })
+}
+
+void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format) 
+{
+    if (width == fWidth && height == fHeight) return;
+
+	fWidth = width;
+	fHeight = height;
+    fFormat = format;
+
+
+	G_RENDERCMD_S({
+
+		if (self->fRenderId)
+		{
+			glCall(glDeleteFramebuffers(1, &self->fRenderId));
+		}
+		
+		if (self->fDepthAttachment)
+		{
+			glCall(glDeleteTextures(1, &self->fDepthAttachment));
+		}
+		
+		if (self->fColorAttachment) 
+		{
+			glCall(glDeleteTextures(1, &self->fColorAttachment));
+		}
+
+
+		glCall(glGenFramebuffers(1, &self->fRenderId));
+		glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->fRenderId));
+
+		
+
+		glCall(glGenTextures(1, &self->fColorAttachment));
+		glCall(glBindTexture(GL_TEXTURE_2D, self->fColorAttachment));
+
+		if (self->fFormat == Graphics::GFramebufferFormat::RGBA16F)
+		{
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, self->fWidth, self->fHeight, 0, GL_RGBA, GL_FLOAT, nullptr));
+		}
+		else if (self->fFormat == Graphics::GFramebufferFormat::RGBA8)
+		{
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self->fWidth, self->fHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
+		}
+
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        glCall(glBindTexture(GL_TEXTURE_2D, 0));
+        
+        
+		glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->fColorAttachment, 0));
+
+		glCall(glGenTextures(1, &self->fDepthAttachment));
+		glCall(glBindTexture(GL_TEXTURE_2D, self->fDepthAttachment));
+		glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, self->fWidth, self->fHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL));
+
+		glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, self->fDepthAttachment, 0));
+
+        GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;
+		if ((frameBufferResult = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
+		{
+            printf("Depth FrameBuffer is incomplete! %d\n", frameBufferResult);
+		}
+			
+
+		glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	})
+}
+
+unsigned int GLFrameBuffer::GetWidth() const
+{
+    return fWidth;
+}
+
+unsigned int GLFrameBuffer::GetHeight() const
+{
+    return fHeight;
+}
+
+void GLFrameBuffer::Bind() const
+{
+    G_RENDERCMD_S({
+        glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->fRenderId));
+        glCall(glViewport(0, 0, self->fWidth, self->fHeight));
+    })
+}
+
+void GLFrameBuffer::Unbind() const
+{
+    G_RENDERCMD({
+			glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	})
+}
+
+unsigned int GLFrameBuffer::GetColorAttachment() const
+{
+    return fColorAttachment;
+}
+
+unsigned int GLFrameBuffer::GetDepthAttachment() const
+{
+    return fDepthAttachment;
+}

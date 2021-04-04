@@ -76,4 +76,30 @@ namespace GL {
 		virtual void SetIndexBuffer(Graphics::GIndexBuffer* indexBuffer) override;
     };
 
+    class GLFrameBuffer : public Graphics::GFrameBuffer
+    {
+    private:
+        GLuint fRenderId;
+        GLuint fColorAttachment;
+        GLuint fDepthAttachment;
+
+        GLuint fWidth;
+        GLuint fHeight;
+        Graphics::GFramebufferFormat fFormat;
+    public:
+        GLFrameBuffer(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format);
+        virtual ~GLFrameBuffer();
+
+		virtual void Resize(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format);
+
+		virtual unsigned int GetWidth() const;
+		virtual unsigned int GetHeight() const;
+
+		virtual void Bind() const;
+		virtual void Unbind() const;
+
+		virtual unsigned int GetColorAttachment() const;
+		virtual unsigned int GetDepthAttachment() const;
+    };
+
 }

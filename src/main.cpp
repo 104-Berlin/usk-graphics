@@ -28,6 +28,22 @@ void main()
 }
 )";
 
+struct Vertex
+{
+    glm::vec3 position;
+};
+
+const std::vector<Vertex> vertices = {
+    {{-0.5f, 0.5f, 0.0f}},
+    {{ 0.5f, 0.5f, 0.0f}},
+    {{ 0.0f, -0.5f, 0.0f}},
+};
+
+const std::vector<unsigned int> indices = {
+    0, 1, 2
+};
+
+
 int main()
 {
     GLFW::GLFWWindow* window = new GLFW::GLFWWindow();
@@ -53,21 +69,49 @@ int main()
         ImGui_ImplOpenGL3_Init();
     })
 
+    GL::GLFrameBuffer* frameBuffer = new GL::GLFrameBuffer(1270, 720, Graphics::GFramebufferFormat::RGBA16F);
+
+    GL::GLVertexArray* vertexArray = new GL::GLVertexArray();
+    vertexArray->Bind();
+
+    GL::GLVertexBuffer* vb = new GL::GLVertexBuffer();
+    vb->SetData((unsigned char*) vertices.data(), vertices.size() * sizeof(Vertex));
+    vb->SetLayout({Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "POSITION")});
+
+    GL::GLIndexBuffer* ib = new GL::GLIndexBuffer();
+    ib->SetData((unsigned char*)indices.data(), indices.size() * sizeof(unsigned int), sizeof(unsigned int));
+    
+    vertexArray->AddVertexBuffer(vb);
+    vertexArray->SetIndexBuffer(ib);
+    
+
+    GL::GLShader* shader = new GL::GLShader();
+    shader->Compile(vertexSource, fragmentSource);
+
 
     while (window->IsOpen())
     {
         window->PollEvents();
 
-        
+        frameBuffer->Bind();
+        mainContext.Clear();
+        shader->Bind();
+        vertexArray->Bind();
 
-        G_RENDERCMD1(window, {
+        G_RENDERCMD({
+            glCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
+        })
+
+        frameBuffer->Unbind();
+
+        G_RENDERCMD2(window, frameBuffer, {
             // Start the Dear ImGui frame
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-            ImGui::Begin("HEllo ImGui");
-
+            ImGui::Begin("HellodhfgodjfkhgdfgImGui");
+            ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), {1000, 1000});
             ImGui::End();
 
             ImGui::Render();
@@ -89,6 +133,11 @@ int main()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    delete vertexArray;
+    delete frameBuffer;
+    delete shader;
+    Renderer::ERenderCommandQueue::Get().Execute();
 
     window->Destroy();
     delete window;
