@@ -20,7 +20,11 @@ add_compile_definitions(G_UNI)
 endif()
 
 
+add_subdirectory(deps/glm)
 add_subdirectory(src/interface)
+
+target_include_directories(GInterface INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/deps/glm)
+
 add_subdirectory(src/renderer)
 
 add_subdirectory(src/platform/opengl)

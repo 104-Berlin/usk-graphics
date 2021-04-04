@@ -9,3 +9,4 @@
 #include "graphics_gl_error.h"
 #include "graphics_gl_buffer.h"
 #include "graphics_gl_context.h"
+#include "graphics_gl_shader.h"

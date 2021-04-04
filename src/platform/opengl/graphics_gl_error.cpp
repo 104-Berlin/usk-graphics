@@ -5,7 +5,6 @@
 
 char const* gl_error_string(GLenum const err) 
 {
-    return nullptr;
   switch (err)
   {
     // opengl 2 errors (8)
