@@ -6,13 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if (${CMAKE_ARCHIVE_OUTPUT_DIRECTORY} STREQUAL "")
+if (NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 endif()
-if (${CMAKE_LIBRARY_OUTPUT_DIRECTORY} STREQUAL "")
+if (NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 endif()
-if (${CMAKE_RUNTIME_OUTPUT_DIRECTORY} STREQUAL "")
+if (NOT DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 endif()
 
@@ -46,6 +46,11 @@ add_subdirectory(src/renderer)
 
 add_subdirectory(src/platform/opengl)
 add_subdirectory(src/platform/glfw)
+
+add_subdirectory(src/platform/wrapper)
+target_link_libraries(GPlatformWrapper GInterface)
+target_link_libraries(GPlatformWrapper GOpenGL)
+target_link_libraries(GPlatformWrapper GGLFW)
 
 
 target_link_libraries(GRenderer GInterface)
