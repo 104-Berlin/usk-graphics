@@ -67,7 +67,7 @@ int main()
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window->GetGlfwWindow(), true);
     ImGui_ImplOpenGL3_Init();
-    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
 
 
 
