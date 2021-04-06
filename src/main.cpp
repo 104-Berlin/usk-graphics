@@ -65,10 +65,11 @@ int main()
     //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer backends
-    G_RENDERCMD1(window, {
-        ImGui_ImplGlfw_InitForOpenGL(window->GetGlfwWindow(), true);
-        ImGui_ImplOpenGL3_Init();
-    })
+    ImGui_ImplGlfw_InitForOpenGL(window->GetGlfwWindow(), true);
+    ImGui_ImplOpenGL3_Init();
+    ImGui_ImplOpenGL3_NewFrame();
+
+
 
     GL::GLFrameBuffer* frameBuffer = new GL::GLFrameBuffer(1270, 720, Graphics::GFramebufferFormat::RGBA16F);
 
@@ -99,17 +100,22 @@ int main()
         renderer->End();
 
 
+
+        ImGui_ImplGlfw_NewFrame();
+
+        ImGui::NewFrame();
+
+        ImGui::Begin("Hello World");
+        ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), {500, 500});
+        ImGui::End();
+
+        ImGui::Render();
+
+
         G_RENDERCMD2(window, frameBuffer, {
             // Start the Dear ImGui frame
             ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            ImGui::Begin("HellodhfgodjfkhgdfgImGui");
-            ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), {500, 500});
-            ImGui::End();
-
-            ImGui::Render();
+            
             int display_w;
             int display_h;
             glfwGetFramebufferSize(window->GetGlfwWindow(), &display_w, &display_h);
