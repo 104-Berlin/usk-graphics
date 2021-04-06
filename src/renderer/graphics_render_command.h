@@ -94,7 +94,7 @@
 #define EXEC_CONSTRUCTOR_INIT_N(N, ...) EXPAND(CONCATENATE(EXEC_CONSTRUCTOR_INIT_, N)(__VA_ARGS__))
 
 #define G_RENDERCOMMAND(...)                                                             \
-	struct CONCATENATE(_RenderCommand_, __LINE__) : public Renderer::ERenderCommand    \
+	struct CONCATENATE(_RenderCommand_, __LINE__) : public Renderer::RRenderCommand    \
 	{                                                                                    \
 		EXPAND(DEFINE_VAR_N(EXPAND(ARG_COUNT(__VA_ARGS__)), __VA_ARGS__))                \
 		CONCATENATE(_RenderCommand_, __LINE__)                                           \
@@ -110,10 +110,10 @@
 
 namespace Renderer
 {
-	class ERenderCommand
+	class RRenderCommand
 	{
 	public:
-		virtual ~ERenderCommand() = default;
+		virtual ~RRenderCommand() = default;
 
 		virtual void Execute() = 0;
 	};
@@ -122,50 +122,50 @@ namespace Renderer
 	 * The Command Queue is a statically created buffer which will process lambda like code.
 	 * It is used to created multi threaded rendering code
 	 */
-	class ERenderCommandQueue
+	class RRenderCommandQueue
 	{
 	public:
-		void Submit(ERenderCommand *renderCommand);
+		void Submit(RRenderCommand *renderCommand);
 
 		void Execute();
 
-		static ERenderCommandQueue& Get();
+		static RRenderCommandQueue& Get();
 
 	private:
-		std::queue<ERenderCommand *> fCommandQueue;
+		std::queue<RRenderCommand *> fCommandQueue;
 	};
 
 }
 
 #define G_RENDERCMD(code) \
 	G_RENDERCOMMAND(code) \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)());
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)());
 #define G_RENDERCMD1(var, code) \
 	G_RENDERCOMMAND(var, code)  \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var));
 #define G_RENDERCMD2(var1, var2, code) \
 	G_RENDERCOMMAND(var1, var2, code)  \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var1, var2));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var1, var2));
 #define G_RENDERCMD3(var1, var2, var3, code) \
 	G_RENDERCOMMAND(var1, var2, var3, code)  \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var1, var2, var3));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var1, var2, var3));
 #define G_RENDERCMD4(var1, var2, var3, var4, code) \
 	G_RENDERCOMMAND(var1, var2, var3, var4, code)  \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var1, var2, var3, var4));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(var1, var2, var3, var4));
 
 #define G_RENDERCMD_S(code)     \
 	auto self = this;           \
 	G_RENDERCOMMAND(self, code) \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self));
 #define G_RENDERCMD_S1(var, code)    \
 	auto self = this;                \
 	G_RENDERCOMMAND(self, var, code) \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self, var));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self, var));
 #define G_RENDERCMD_S2(var1, var2, code)    \
 	auto self = this;                       \
 	G_RENDERCOMMAND(self, var1, var2, code) \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self, var1, var2));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self, var1, var2));
 #define G_RENDERCMD_S3(var1, var2, var3, code)    \
 	auto self = this;                             \
 	G_RENDERCOMMAND(self, var1, var2, var3, code) \
-	Renderer::ERenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self, var1, var2, var3));
+	Renderer::RRenderCommandQueue::Get().Submit(new CONCATENATE(_RenderCommand_, __LINE__)(self, var1, var2, var3));

@@ -18,3 +18,17 @@ void GLContext::Clear(float r, float g, float b, unsigned char GCLEAROPTIONS)
         glCall(glClear(GL_COLOR_BUFFER_BIT));
     })
 }
+
+void GLContext::DrawElements(size_t count, Graphics::GIndexType indexType, Graphics::GDrawMode drawMode) 
+{
+    G_RENDERCMD3(count, indexType, drawMode, {
+        glCall(glDrawElements(DrawModeToOpenGLMode(drawMode), count, IndexTypeToOpenGLType(indexType), NULL));
+    })
+}
+
+void GLContext::DrawArrays(size_t start, size_t count, Graphics::GDrawMode drawMode) 
+{
+    G_RENDERCMD3(start, count, drawMode, {
+        glCall(glDrawArrays(DrawModeToOpenGLMode(drawMode), start, count));
+    })
+}

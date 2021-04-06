@@ -78,17 +78,41 @@ size_t GLIndexBuffer::GetIndexCount() const
     return fIndexCount;
 }
 
+Graphics::GIndexType GLIndexBuffer::GetIndexType() const 
+{
+    return fType;
+}
+
 void GLIndexBuffer::SetData(unsigned char* data, size_t size_in_bytes, size_t element_size)
 {
+    if (element_size == 1)
+    {
+        fType = Graphics::GIndexType::UNSIGNED_BYTE;
+    }
+    else if (element_size == 2)
+    {
+        fType = Graphics::GIndexType::UNSIGNED_SHORT;
+    }
+    else if (element_size == 4)
+    {
+        fType = Graphics::GIndexType::UNSIGNED_INT;
+    }
+    else
+    {
+        printf("Wrong element size for the indexBuffer. Accepted sizes are: 1, 2 and 4 bytes!\n");
+        return;
+    }
+
     if (size_in_bytes % element_size != 0)
     {
-        printf("Cant set Data of IndexBuffer. Size in bytes is not devidable by element size!");
+        printf("Cant set Data of IndexBuffer. Size in bytes is not devidable by element size!\n");
         return;
     }
     Graphics::GSharedBuffer sharedBuffer;
     sharedBuffer.InitWith<unsigned char>(data, size_in_bytes);
 
     fIndexCount = size_in_bytes / element_size;
+
 
     Bind();
     G_RENDERCMD_S1(sharedBuffer, {

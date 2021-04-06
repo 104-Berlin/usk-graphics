@@ -143,6 +143,8 @@ namespace Graphics {
 		DYNAMIC_COPY
 	};
 
+
+
     class GVertexBuffer
     {
     private:
@@ -159,6 +161,15 @@ namespace Graphics {
         virtual void SetData(unsigned char* data, size_t data_size) = 0;
     };
 
+
+
+    enum class GIndexType
+    {
+        UNSIGNED_BYTE,
+        UNSIGNED_SHORT,
+        UNSIGNED_INT
+    };
+
     class GIndexBuffer
     {
     public:
@@ -168,6 +179,7 @@ namespace Graphics {
         virtual void Unbind() const = 0;
 
         virtual size_t GetIndexCount() const = 0;
+		virtual GIndexType GetIndexType() const = 0;
 
         virtual void SetData(unsigned char* data, size_t size_in_bytes, size_t element_size) = 0;
     };

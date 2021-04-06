@@ -40,6 +40,10 @@ add_subdirectory(src/renderer)
 add_subdirectory(src/platform/opengl)
 add_subdirectory(src/platform/glfw)
 
+
+target_link_libraries(GRenderer GInterface)
+target_link_libraries(GRenderer ImGui)
+
 target_link_libraries(GOpenGL GInterface)
 target_link_libraries(GOpenGL GRenderer)
 target_link_libraries(GGLFW GInterface)

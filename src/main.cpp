@@ -51,6 +51,7 @@ int main()
     window->Create("My Test window", 1270, 720);
     mainContext.Init((void*) glfwGetProcAddress);
 
+    Renderer::RRenderer3D* renderer = new Renderer::RRenderer3D(&mainContext);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -93,16 +94,10 @@ int main()
     {
         window->PollEvents();
 
-        frameBuffer->Bind();
-        mainContext.Clear();
-        shader->Bind();
-        vertexArray->Bind();
+        renderer->Begin(frameBuffer);
+        renderer->Submit(vertexArray, shader);
+        renderer->End();
 
-        G_RENDERCMD({
-            glCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
-        })
-
-        frameBuffer->Unbind();
 
         G_RENDERCMD2(window, frameBuffer, {
             // Start the Dear ImGui frame
@@ -111,7 +106,7 @@ int main()
             ImGui::NewFrame();
 
             ImGui::Begin("HellodhfgodjfkhgdfgImGui");
-            ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), {1000, 1000});
+            ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), {500, 500});
             ImGui::End();
 
             ImGui::Render();
@@ -126,7 +121,7 @@ int main()
 
 
         // Swap the renderer
-        Renderer::ERenderCommandQueue::Get().Execute();
+        Renderer::RRenderCommandQueue::Get().Execute();
         window->SwapBuffer();
     }
 
@@ -137,7 +132,8 @@ int main()
     delete vertexArray;
     delete frameBuffer;
     delete shader;
-    Renderer::ERenderCommandQueue::Get().Execute();
+    delete renderer;
+    Renderer::RRenderCommandQueue::Get().Execute();
 
     window->Destroy();
     delete window;

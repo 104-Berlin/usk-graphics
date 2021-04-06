@@ -3,12 +3,12 @@
 using namespace Renderer;
 
 
-void ERenderCommandQueue::Submit(ERenderCommand *renderCommand) 
+void RRenderCommandQueue::Submit(RRenderCommand *renderCommand) 
 {
     fCommandQueue.push(renderCommand);    
 }
 
-void ERenderCommandQueue::Execute() 
+void RRenderCommandQueue::Execute() 
 {
     while (fCommandQueue.size() > 0)
     {
@@ -18,8 +18,8 @@ void ERenderCommandQueue::Execute()
     }
 }
 
-ERenderCommandQueue& ERenderCommandQueue::Get() 
+RRenderCommandQueue& RRenderCommandQueue::Get() 
 {
-    static ERenderCommandQueue queue;
+    static RRenderCommandQueue queue;
     return queue;   
 }

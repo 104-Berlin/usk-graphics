@@ -45,6 +45,7 @@ namespace GL {
     private:
         GLuint fRenderId;
         size_t fIndexCount;
+        Graphics::GIndexType fType;
     public:
         GLIndexBuffer();
         ~GLIndexBuffer();
@@ -53,6 +54,7 @@ namespace GL {
         virtual void Unbind() const override;
 
         virtual size_t GetIndexCount() const override;
+        virtual Graphics::GIndexType GetIndexType() const override;
 
         virtual void SetData(unsigned char* data, size_t size_in_bytes, size_t element_size) override;
     };
