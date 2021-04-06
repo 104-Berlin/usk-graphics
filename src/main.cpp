@@ -98,11 +98,22 @@ int main()
     {
         window->PollEvents();
 
+
+        /**
+         * Testing the real rendering
+         * 
+         */
         renderer->Begin(frameBuffer);
         renderer->Submit(vertexArray, shader);
         renderer->End();
+        /**
+         * 
+         */
 
 
+        /**
+         * ImGui Controls
+         */
 
         ImGui_ImplGlfw_NewFrame();
 
