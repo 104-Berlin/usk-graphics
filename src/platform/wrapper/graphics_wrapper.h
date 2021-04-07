@@ -23,5 +23,11 @@ namespace Graphics {
         G_API GIndexBuffer* CreateIndexBuffer();
         G_API GFrameBuffer* CreateFrameBuffer(unsigned int width = 0, unsigned int height = 0, GFrameBufferFormat format = GFrameBufferFormat::RGBA8);
         G_API GShader* CreateShader();
+
+
+        /**
+         * Create Default Shaders
+         */
+        G_API Renderer::RRenderer3D Create3DRenderer(GContext* context);
     }
 }

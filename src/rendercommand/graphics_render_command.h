@@ -108,9 +108,23 @@
 		}                                                                                \
 	};
 
+
+#include <queue>
+
+#include "graphics_shared_buffer.h"
+
+#ifdef G_WIN
+    #ifdef GRCMD_EXPORT
+        #define G_RAPI __declspec(dllexport)
+    #else
+        #define G_RAPI __declspec(dllimport)
+    #endif
+#else
+    #define G_RAPI
+#endif
 namespace Renderer
 {
-	class RRenderCommand
+	class G_RAPI RRenderCommand
 	{
 	public:
 		virtual ~RRenderCommand() = default;
@@ -122,7 +136,7 @@ namespace Renderer
 	 * The Command Queue is a statically created buffer which will process lambda like code.
 	 * It is used to created multi threaded rendering code
 	 */
-	class RRenderCommandQueue
+	class G_RAPI RRenderCommandQueue
 	{
 	public:
 		void Submit(RRenderCommand *renderCommand);

@@ -5,6 +5,8 @@ namespace Graphics {
     class GShader
     {
     public:
+        virtual ~GShader() = default;
+        
         virtual void Compile(std::string_view vertexSource, std::string_view fragmentSource) = 0;
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;

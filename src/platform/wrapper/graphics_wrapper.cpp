@@ -12,6 +12,36 @@
 
 using namespace Graphics;
 
+/**
+ * 
+ * Default 3D Shader
+ * 
+ */
+
+const char* default_3d_vertex_shader = R"(
+#version 330 core
+
+layout(location = 0) in vec3 vPosition;
+
+void main()
+{
+    gl_Position = vec4(vPosition, 1.0);
+}
+)";
+
+const char* default_3d_fragment_shader = R"(
+#version 330 core
+
+layout(location = 0) out vec4 fColor;
+
+void main()
+{
+    fColor = vec4(1, 0, 0, 1);
+}
+)";
+
+static GShader* default_3d_shader = nullptr;
+
 
 void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)()) 
 {
@@ -37,10 +67,11 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
     window->Create("My Test window", 1270, 720);
     window->CreateContext(context);
 
-    if (OnInit)
-    {
-        OnInit(context);
-    }
+
+    default_3d_shader = CreateShader();
+    default_3d_shader->Compile(default_3d_vertex_shader, default_3d_fragment_shader);
+
+    
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -64,6 +95,11 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
     ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
 #endif
 #endif
+
+    if (OnInit)
+    {
+        OnInit(context);
+    }
 
     while (window->IsOpen())
     {
@@ -168,6 +204,7 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
 #endif  
     ImGui::DestroyContext();   
 
+    delete default_3d_shader;
     delete context;
     Renderer::RRenderCommandQueue::Get().Execute();
 
@@ -218,4 +255,15 @@ return new GL::GLShader();
 #else
 return nullptr;
 #endif
+}
+
+
+
+
+
+G_API Renderer::RRenderer3D Wrapper::Create3DRenderer(GContext* context) 
+{
+    Renderer::RRenderer3D renderer(context, default_3d_shader);
+    
+    return renderer;
 }

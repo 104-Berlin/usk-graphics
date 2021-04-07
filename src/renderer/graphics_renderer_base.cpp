@@ -8,6 +8,5 @@ RRendererBase::RRendererBase(Graphics::GContext* context)
     if (!context)
     {
         printf("Cant Create Renderer with undefined context!");
-        exit(1);
     }
 }
