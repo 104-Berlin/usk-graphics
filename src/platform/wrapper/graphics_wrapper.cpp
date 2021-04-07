@@ -43,7 +43,7 @@ void main()
 static GShader* default_3d_shader = nullptr;
 
 
-void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)()) 
+void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)()) 
 {
     GWindow* window = nullptr;
     GContext* context = nullptr;
@@ -203,6 +203,11 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
     ImGui_ImplOpenGL3_Shutdown();
 #endif  
     ImGui::DestroyContext();   
+
+    if (CleanUp)
+    {
+        CleanUp();
+    }
 
     delete default_3d_shader;
     delete context;

@@ -15,7 +15,7 @@
 
 namespace Graphics {
     namespace Wrapper {
-        G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)());
+        G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)());
 
         G_API GVertexArray* CreateVertexArray();
         G_API GVertexBuffer* CreateVertexBuffer();

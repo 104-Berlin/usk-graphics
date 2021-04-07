@@ -28,13 +28,19 @@ void Init(GContext* context)
     mesh->SetData(vertices, indices);
 }
 
+void CleanUp()
+{
+    delete frameBuffer;
+    delete mesh;
+}
+
 void Render();
 void RenderImGui();
 
 
 int main()
 {
-    Wrapper::RunApplicationLoop(&Init, &Render, &RenderImGui);
+    Wrapper::RunApplicationLoop(&Init, &Render, &RenderImGui, &CleanUp);
     delete frameBuffer;
     delete mesh;
 }
