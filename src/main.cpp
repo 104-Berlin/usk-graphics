@@ -22,7 +22,7 @@ static RMesh* mesh = new RMesh();
 
 void Init(GContext* context)
 {
-    renderer = RRenderer3D(context, Wrapper::GetDefault3DShader());
+    renderer = RRenderer3D(context);
     frameBuffer = Wrapper::CreateFrameBuffer(1270, 720, Graphics::GFrameBufferFormat::RGBA16F);
 
     mesh->SetData(vertices, indices);

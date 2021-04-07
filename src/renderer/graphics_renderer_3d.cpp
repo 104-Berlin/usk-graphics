@@ -3,13 +3,9 @@
 using namespace Renderer;
 
 
-RRenderer3D::RRenderer3D(Graphics::GContext* context, Graphics::GShader* default_shader) 
-    : RRendererBase(context), fCurrentFrameBuffer(nullptr), fDefaultShader(default_shader)
+RRenderer3D::RRenderer3D(Graphics::GContext* context) 
+    : RRendererBase(context), fCurrentFrameBuffer(nullptr), fDefaultShader(Graphics::Wrapper::GetDefault3DShader())
 {
-    if (!default_shader)
-    {
-        printf("You should provide a default shader for the 3D-Renderer\n");
-    }
 }
 
 void RRenderer3D::Begin(Graphics::GFrameBuffer* frameBuffer) 

@@ -8,7 +8,7 @@ namespace Renderer {
         Graphics::GShader*      fDefaultShader;
         Graphics::GFrameBuffer* fCurrentFrameBuffer;
     public:
-        RRenderer3D(Graphics::GContext* context = nullptr, Graphics::GShader* default_shader = nullptr);
+        RRenderer3D(Graphics::GContext* context = nullptr);
 
         virtual void Begin(Graphics::GFrameBuffer* frameBuffer);
         void Submit(RMesh* mesh);
