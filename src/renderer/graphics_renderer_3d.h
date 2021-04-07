@@ -11,6 +11,7 @@ namespace Renderer {
         RRenderer3D(Graphics::GContext* context = nullptr, Graphics::GShader* default_shader = nullptr);
 
         virtual void Begin(Graphics::GFrameBuffer* frameBuffer);
+        void Submit(RMesh* mesh);
         void Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader = nullptr);
         virtual void End();
     };

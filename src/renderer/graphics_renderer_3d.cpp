@@ -19,6 +19,20 @@ void RRenderer3D::Begin(Graphics::GFrameBuffer* frameBuffer)
     fContext->Clear();
 }
 
+void RRenderer3D::Submit(RMesh* mesh) 
+{
+    if (!fDefaultShader)
+    {
+        printf("Not shader found to render vertexarray!\n");
+        return;
+    }
+
+    fDefaultShader->Bind();
+    mesh->BindToDraw();
+
+    fContext->DrawElements(mesh->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::TRIANGLES);
+}
+
 void RRenderer3D::Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader) 
 {
     Graphics::GShader* usedShader = shader;

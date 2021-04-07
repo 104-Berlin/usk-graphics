@@ -258,12 +258,7 @@ return nullptr;
 }
 
 
-
-
-
-G_API Renderer::RRenderer3D Wrapper::Create3DRenderer(GContext* context) 
+G_API GShader* Wrapper::GetDefault3DShader() 
 {
-    Renderer::RRenderer3D renderer(context, default_3d_shader);
-    
-    return renderer;
+    return default_3d_shader;    
 }

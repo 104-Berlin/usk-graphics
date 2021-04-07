@@ -1,7 +1,6 @@
 #pragma once
 
 #include "graphics_interface.h"
-#include "graphics_renderer.h"
 #include "imgui.h"
 
 #ifdef G_WIN
@@ -25,9 +24,6 @@ namespace Graphics {
         G_API GShader* CreateShader();
 
 
-        /**
-         * Create Default Shaders
-         */
-        G_API Renderer::RRenderer3D Create3DRenderer(GContext* context);
+        G_API GShader* GetDefault3DShader();
     }
 }

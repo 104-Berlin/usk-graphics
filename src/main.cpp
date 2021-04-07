@@ -1,13 +1,12 @@
 #include "graphics_wrapper.h"
+#include "graphics_renderer.h"
 
 using namespace Graphics;
-struct Vertex
-{
-    glm::vec3 position;
-};
+using namespace Renderer;
 
 
-const std::vector<Vertex> vertices = {
+
+const std::vector<RMesh::Vertex> vertices = {
     {{-0.5f, 0.5f, 0.0f}},
     {{ 0.5f, 0.5f, 0.0f}},
     {{ 0.0f, -0.5f, 0.0f}},
@@ -19,25 +18,14 @@ const std::vector<unsigned int> indices = {
 
 static Renderer::RRenderer3D renderer;
 static GFrameBuffer* frameBuffer = nullptr;
-static GVertexArray* vertexArray = nullptr;
+static RMesh* mesh = new RMesh();
 
 void Init(GContext* context)
 {
-    renderer = Wrapper::Create3DRenderer(context);
+    renderer = RRenderer3D(context, Wrapper::GetDefault3DShader());
     frameBuffer = Wrapper::CreateFrameBuffer(1270, 720, Graphics::GFrameBufferFormat::RGBA16F);
 
-    vertexArray = Wrapper::CreateVertexArray();
-    vertexArray->Bind();
-
-    GVertexBuffer* vb = Wrapper::CreateVertexBuffer();
-    vb->SetData((unsigned char*) vertices.data(), vertices.size() * sizeof(Vertex));
-    vb->SetLayout({Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "POSITION")});
-
-    GIndexBuffer* ib = Wrapper::CreateIndexBuffer();
-    ib->SetData((unsigned char*)indices.data(), indices.size() * sizeof(unsigned int), sizeof(unsigned int));
-    
-    vertexArray->AddVertexBuffer(vb);
-    vertexArray->SetIndexBuffer(ib);
+    mesh->SetData(vertices, indices);
 }
 
 void Render();
@@ -47,13 +35,15 @@ void RenderImGui();
 int main()
 {
     Wrapper::RunApplicationLoop(&Init, &Render, &RenderImGui);
+    delete frameBuffer;
+    delete mesh;
 }
 
 
 void Render() 
 {
     renderer.Begin(frameBuffer);
-    renderer.Submit(vertexArray);
+    renderer.Submit(mesh);
     renderer.End();
 }
 
