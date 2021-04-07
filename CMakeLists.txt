@@ -51,6 +51,7 @@ add_subdirectory(src/platform/wrapper)
 target_link_libraries(GPlatformWrapper GInterface)
 target_link_libraries(GPlatformWrapper GOpenGL)
 target_link_libraries(GPlatformWrapper GGLFW)
+target_link_libraries(GPlatformWrapper ImGui)
 
 
 target_link_libraries(GRenderer GInterface)
@@ -62,10 +63,6 @@ target_link_libraries(GGLFW GInterface)
 
 
 
-add_executable(Main     src/main.cpp
-                        deps/imgui/backends/imgui_impl_glfw.cpp
-                        deps/imgui/backends/imgui_impl_opengl3.cpp)
+add_executable(Main     src/main.cpp)
 
-target_link_libraries(Main GOpenGL)
-target_link_libraries(Main GGLFW)
-target_link_libraries(Main ImGui)
+target_link_libraries(Main GPlatformWrapper)

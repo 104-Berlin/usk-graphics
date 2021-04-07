@@ -87,12 +87,12 @@ namespace GL {
 
         GLuint fWidth;
         GLuint fHeight;
-        Graphics::GFramebufferFormat fFormat;
+        Graphics::GFrameBufferFormat fFormat;
     public:
-        GLFrameBuffer(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format);
+        GLFrameBuffer(unsigned int width = 0, unsigned int height = 0, Graphics::GFrameBufferFormat format = Graphics::GFrameBufferFormat::RGBA8);
         virtual ~GLFrameBuffer();
 
-		virtual void Resize(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format);
+		virtual void Resize(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format);
 
 		virtual unsigned int GetWidth() const;
 		virtual unsigned int GetHeight() const;

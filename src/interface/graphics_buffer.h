@@ -197,7 +197,7 @@ namespace Graphics {
 		virtual void SetIndexBuffer(GIndexBuffer* indexBuffer) = 0;
     };
 
-	enum class GFramebufferFormat
+	enum class GFrameBufferFormat
 	{
 		None = 0,
 		RGBA8 = 1,
@@ -209,7 +209,7 @@ namespace Graphics {
 	public:
 		virtual ~GFrameBuffer() = default;
 
-		virtual void Resize(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format) = 0;
+		virtual void Resize(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format) = 0;
 
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;

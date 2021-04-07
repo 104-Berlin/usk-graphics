@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
-add_library(GPlatformWrapper SHARED graphics_wrapper_buffer.cpp)
+add_library(GPlatformWrapper SHARED graphics_wrapper.cpp)
+
+
+
 target_include_directories(GPlatformWrapper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(GPlatformWrapper PRIVATE G_EXPORT_WRAPPER)

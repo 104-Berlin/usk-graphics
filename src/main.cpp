@@ -1,8 +1,4 @@
-#include "platform/opengl/graphics_opengl.h"
-#include "platform/glfw/graphics_glfw.h"
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
+#include "graphics_wrapper.h"
 
 using namespace Graphics;
 
@@ -33,6 +29,7 @@ struct Vertex
     glm::vec3 position;
 };
 
+
 const std::vector<Vertex> vertices = {
     {{-0.5f, 0.5f, 0.0f}},
     {{ 0.5f, 0.5f, 0.0f}},
@@ -43,170 +40,56 @@ const std::vector<unsigned int> indices = {
     0, 1, 2
 };
 
+static Renderer::RRenderer3D* renderer = nullptr;
+static GFrameBuffer* frameBuffer = nullptr;
+static GVertexArray* vertexArray = nullptr;
+static GShader* shader=nullptr;
 
-int main()
+void Init(GContext* context)
 {
-    GLFW::GLFWWindow* window = new GLFW::GLFWWindow();
-    GL::GLContext mainContext;
-    window->Create("My Test window", 1270, 720);
-    mainContext.Init((void*) glfwGetProcAddress);
+    renderer = new Renderer::RRenderer3D(context);
+    frameBuffer = Wrapper::CreateFrameBuffer(1270, 720, Graphics::GFrameBufferFormat::RGBA16F);
 
-    Renderer::RRenderer3D* renderer = new Renderer::RRenderer3D(&mainContext);
-
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window->GetGlfwWindow(), true);
-    ImGui_ImplOpenGL3_Init();
-    ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
-
-
-
-    GL::GLFrameBuffer* frameBuffer = new GL::GLFrameBuffer(1270, 720, Graphics::GFramebufferFormat::RGBA16F);
-
-    GL::GLVertexArray* vertexArray = new GL::GLVertexArray();
+    vertexArray = Wrapper::CreateVertexArray();
     vertexArray->Bind();
 
-    GL::GLVertexBuffer* vb = new GL::GLVertexBuffer();
+    GVertexBuffer* vb = Wrapper::CreateVertexBuffer();
     vb->SetData((unsigned char*) vertices.data(), vertices.size() * sizeof(Vertex));
     vb->SetLayout({Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "POSITION")});
 
-    GL::GLIndexBuffer* ib = new GL::GLIndexBuffer();
+    GIndexBuffer* ib = Wrapper::CreateIndexBuffer();
     ib->SetData((unsigned char*)indices.data(), indices.size() * sizeof(unsigned int), sizeof(unsigned int));
     
     vertexArray->AddVertexBuffer(vb);
     vertexArray->SetIndexBuffer(ib);
     
 
-    GL::GLShader* shader = new GL::GLShader();
+    shader = Wrapper::CreateShader();
     shader->Compile(vertexSource, fragmentSource);
+}
+
+void Render();
+void RenderImGui();
 
 
-    while (window->IsOpen())
-    {
-        window->PollEvents();
+int main()
+{
+    Wrapper::RunApplicationLoop(&Init, &Render, &RenderImGui);
+}
 
 
-        /**
-         * Testing the real rendering
-         * 
-         */
-        renderer->Begin(frameBuffer);
-        renderer->Submit(vertexArray, shader);
-        renderer->End();
-        /**
-         * 
-         */
+void Render() 
+{
+    renderer->Begin(frameBuffer);
+    renderer->Submit(vertexArray, shader);
+    renderer->End();
+}
 
-
-        /**
-         * ImGui Controls
-         */
-
-        ImGui_ImplGlfw_NewFrame();
-
-        ImGui::NewFrame();
-
-        static bool p_open;
-
-        static bool opt_fullscreen_persistant = true;
-        static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
-        bool opt_fullscreen = opt_fullscreen_persistant;
-
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar;
-        if (opt_fullscreen)
-        {
-            ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->Pos);
-            ImGui::SetNextWindowSize(viewport->Size);
-            ImGui::SetNextWindowViewport(viewport->ID);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-        }
-
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", &p_open, window_flags);
-        ImGui::PopStyleVar();
-
-
-        if (opt_fullscreen)
-            ImGui::PopStyleVar(2);
-
-        // Dockspace		         
-        ImGuiIO& io = ImGui::GetIO();		        
-        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-        {		
-            ImGuiID dockspace_id = ImGui::GetID("MyDockspace");		
-            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);		
-        }
-
-        ImGui::Begin("Hello World");
-        ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), {500, 500});
-        ImGui::End();
-
-
-        
-        ImGui::End();
-
-        ImGui::Render();
-
-
-        G_RENDERCMD2(window, frameBuffer, {
-            ImGuiIO& io = ImGui::GetIO();
-            // Start the Dear ImGui frame
-            ImGui_ImplOpenGL3_NewFrame();
-            
-            int display_w;
-            int display_h;
-            glfwGetFramebufferSize(window->GetGlfwWindow(), &display_w, &display_h);
-            glViewport(0, 0, display_w, display_h);
-            glClearColor(0, 0, 0, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-            // Update and Render additional Platform Windows
-            // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-            //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-            {
-                GLFWwindow* backup_current_context = glfwGetCurrentContext();
-                ImGui::UpdatePlatformWindows();
-                ImGui::RenderPlatformWindowsDefault();
-                glfwMakeContextCurrent(backup_current_context);
-            }
-        })
-
-
-        // Swap the renderer
-        Renderer::RRenderCommandQueue::Get().Execute();
-        window->SwapBuffer();
-    }
-
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    delete vertexArray;
-    delete frameBuffer;
-    delete shader;
-    delete renderer;
-    Renderer::RRenderCommandQueue::Get().Execute();
-
-    window->Destroy();
-    delete window;
+void RenderImGui()
+{
+    ImGui::Begin("Test Frame");
+    ImVec2 contentRegion = ImGui::GetContentRegionAvail();
+    frameBuffer->Resize(contentRegion.x, contentRegion.y, GFrameBufferFormat::RGBA8);
+    ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), contentRegion);
+    ImGui::End();
 }

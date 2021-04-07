@@ -1,5 +1,7 @@
 #pragma once
 
+#define GRAPHICS_USE_OPENGL
+
 #include "glad/glad.h"
 
 #include "graphics_interface.h"

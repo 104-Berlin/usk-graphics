@@ -8,6 +8,7 @@ namespace GLFW {
         GLFWwindow* fGLFWWindow;
     public:
         virtual void Create(const char* title, int width, int height) override;
+        virtual void CreateContext(Graphics::GContext* context) override;
         virtual void Destroy() override;
         virtual void SwapBuffer() override;
         virtual void PollEvents() override;

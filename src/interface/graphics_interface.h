@@ -6,7 +6,7 @@
 
 #include "glm/glm.hpp"
 
-#include "graphics_window.h"
 #include "graphics_buffer.h"
 #include "graphics_shader.h"
 #include "graphics_context.h"
+#include "graphics_window.h"

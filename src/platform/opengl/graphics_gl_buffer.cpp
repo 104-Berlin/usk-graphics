@@ -209,8 +209,8 @@ void GLVertexArray::SetIndexBuffer(Graphics::GIndexBuffer* indexBuffer)
     fIndexBuffer = indexBuffer;
 }
 
-GLFrameBuffer::GLFrameBuffer(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format) 
-    : fWidth(0), fHeight(0), fFormat(Graphics::GFramebufferFormat::None), fRenderId(0), fColorAttachment(0), fDepthAttachment(0)
+GLFrameBuffer::GLFrameBuffer(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format) 
+    : fWidth(0), fHeight(0), fFormat(Graphics::GFrameBufferFormat::None), fRenderId(0), fColorAttachment(0), fDepthAttachment(0)
 {
     Resize(width, height, format);
 }
@@ -227,9 +227,10 @@ GLFrameBuffer::~GLFrameBuffer()
     })
 }
 
-void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GFramebufferFormat format) 
+void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format) 
 {
     if (width == fWidth && height == fHeight) return;
+    if (width == 0 || height == 0) return;
 
 	fWidth = width;
 	fHeight = height;
@@ -262,11 +263,11 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
 		glCall(glGenTextures(1, &self->fColorAttachment));
 		glCall(glBindTexture(GL_TEXTURE_2D, self->fColorAttachment));
 
-		if (self->fFormat == Graphics::GFramebufferFormat::RGBA16F)
+		if (self->fFormat == Graphics::GFrameBufferFormat::RGBA16F)
 		{
 			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, self->fWidth, self->fHeight, 0, GL_RGBA, GL_FLOAT, nullptr));
 		}
-		else if (self->fFormat == Graphics::GFramebufferFormat::RGBA8)
+		else if (self->fFormat == Graphics::GFrameBufferFormat::RGBA8)
 		{
 			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self->fWidth, self->fHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 		}

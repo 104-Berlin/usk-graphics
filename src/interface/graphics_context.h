@@ -22,6 +22,7 @@ namespace Graphics {
     class GContext 
     {
     public:
+        virtual ~GContext() = default;
         virtual void Init(void* initData) = 0;
 
         virtual void Clear(float r = 0.0f, float g = 0.0f, float b = 0.0f, unsigned char GCLEAROPTION = 0) = 0;

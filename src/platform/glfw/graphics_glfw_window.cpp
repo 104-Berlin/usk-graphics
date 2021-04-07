@@ -34,6 +34,14 @@ void GLFWWindow::Create(const char* title, int width, int height)
     MakeContextCurrent();
 }
 
+void GLFWWindow::CreateContext(Graphics::GContext* context) 
+{
+    if (context)
+    {
+        context->Init((void*)glfwGetProcAddress);
+    }
+}
+
 void GLFWWindow::Destroy() 
 {
     if (fGLFWWindow)
