@@ -41,8 +41,6 @@ void RenderImGui();
 int main()
 {
     Wrapper::RunApplicationLoop(&Init, &Render, &RenderImGui, &CleanUp);
-    delete frameBuffer;
-    delete mesh;
 }
 
 
