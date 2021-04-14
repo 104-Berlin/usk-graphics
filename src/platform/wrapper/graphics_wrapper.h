@@ -15,7 +15,13 @@
 
 namespace Graphics {
     namespace Wrapper {
-        G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)());
+
+        static void SetImGuiContext(ImGuiContext* context)
+        {
+            ImGui::SetCurrentContext(context);
+        }
+
+        G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*));
 
         G_API GVertexArray* CreateVertexArray();
         G_API GVertexBuffer* CreateVertexBuffer();
@@ -25,5 +31,7 @@ namespace Graphics {
 
 
         G_API GShader* GetDefault3DShader();
+
+       
     }
 }
