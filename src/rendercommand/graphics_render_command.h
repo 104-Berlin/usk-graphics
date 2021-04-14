@@ -109,9 +109,6 @@
 	};
 
 
-#include <queue>
-
-#include "graphics_shared_buffer.h"
 
 #ifdef G_WIN
     #ifdef GRCMD_EXPORT
@@ -122,6 +119,13 @@
 #else
     #define G_RAPI
 #endif
+
+
+
+#include <queue>
+
+#include "graphics_shared_buffer.h"
+
 namespace Renderer
 {
 	class G_RAPI RRenderCommand

@@ -3,7 +3,7 @@
 namespace Graphics {
     
 
-    class GSharedBuffer
+    class G_RAPI GSharedBuffer
     {
     private:
         class BufferDataBase
