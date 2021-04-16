@@ -45,9 +45,9 @@ static GShader* default_3d_shader = nullptr;
 
 static ImGuiContext* imguiContext = nullptr;
 
-void Wrapper::ResetImGuiContext()
+ImGuiContext* Wrapper::GetCurrentImGuiContext()
 {
-    SetImGuiContext(imguiContext);
+    return imguiContext;
 }
 
 void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*))
