@@ -20,6 +20,7 @@ namespace Graphics {
         {
             ImGui::SetCurrentContext(context);
         }
+        G_API void ResetImGuiContext();
 
         G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*));
 

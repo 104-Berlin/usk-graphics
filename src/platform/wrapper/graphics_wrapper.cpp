@@ -43,6 +43,13 @@ void main()
 static GShader* default_3d_shader = nullptr;
 
 
+static ImGuiContext* imguiContext = nullptr;
+
+void Wrapper::ResetImGuiContext()
+{
+    SetImGuiContext(imguiContext);
+}
+
 void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*))
 {
     GWindow* window = nullptr;
@@ -76,7 +83,7 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiContext* imguiContext = ImGui::GetCurrentContext();
+    imguiContext = ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
