@@ -21,6 +21,7 @@ namespace Graphics {
             ImGui::SetCurrentContext(context);
         }
         G_API ImGuiContext* GetCurrentImGuiContext();
+        G_API GContext* GetMainContext();
 
         G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*));
 

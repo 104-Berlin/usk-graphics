@@ -44,35 +44,41 @@ static GShader* default_3d_shader = nullptr;
 
 
 static ImGuiContext* imguiContext = nullptr;
+static GContext* mainContext = nullptr;
 
 ImGuiContext* Wrapper::GetCurrentImGuiContext()
 {
     return imguiContext;
 }
 
+GContext* Wrapper::GetMainContext() 
+{
+    return mainContext;
+}
+
 void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*))
 {
     GWindow* window = nullptr;
-    GContext* context = nullptr;
+    mainContext = nullptr;
 #ifdef G_USE_GLFW
     window = new GLFW::GLFWWindow();
 #endif
 #ifdef G_USE_OPENGL
-    context = new GL::GLContext();
+    mainContext = new GL::GLContext();
 #endif    
     if (!window)
     {
         printf("Could not create window. Please select window API");
         return;
     }
-    if (!context)
+    if (!mainContext)
     {
         printf("Could not create context. Please select rendering API");
         return;
     }
 
     window->Create("My Test window", 1270, 720);
-    window->CreateContext(context);
+    window->CreateContext(mainContext);
 
 
     default_3d_shader = CreateShader();
@@ -110,7 +116,7 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
     }
     if (OnInit)
     {
-        OnInit(context);
+        OnInit(mainContext);
     }
 
     while (window->IsOpen())
@@ -222,7 +228,7 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
     }
 
     delete default_3d_shader;
-    delete context;
+    delete mainContext;
     Renderer::RRenderCommandQueue::Get().Execute();
 
     window->Destroy();
