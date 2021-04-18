@@ -2,6 +2,7 @@
 
 #include "graphics_interface.h"
 #include "imgui.h"
+#include "ImGuizmo.h"
 
 #ifdef G_WIN
     #ifdef G_EXPORT_WRAPPER

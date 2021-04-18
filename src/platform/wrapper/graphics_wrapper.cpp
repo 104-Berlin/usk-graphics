@@ -133,7 +133,8 @@ void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderC
 #endif
 
         ImGui::NewFrame();
-
+        ImGuizmo::BeginFrame();
+        
         static bool p_open;
 
         static bool opt_fullscreen_persistant = true;
