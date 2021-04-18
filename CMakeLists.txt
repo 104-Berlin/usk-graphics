@@ -32,13 +32,25 @@ add_library(ImGui STATIC    deps/imgui/imgui.cpp
                             deps/imgui/imgui_draw.cpp
                             deps/imgui/imgui_widgets.cpp
                             deps/imgui/imgui_tables.cpp
-                            deps/imguizmo/ImGuizmo.cpp)
+                            deps/imguizmo/ImGuizmo.cpp
+                            deps/imguizmo/ImCurveEdit.cpp
+                            deps/imguizmo/ImGradient.cpp
+                            deps/imguizmo/ImSequencer.cpp)
 
                             
 target_include_directories(ImGui PUBLIC deps/imgui
                                         deps/imguizmo)
                             
-add_executable(ImGuizmoExmaple deps/imguizmo/example/main.cpp)
+add_executable(ImGuizmoExmaple      deps/imguizmo/ImGuizmo.cpp
+                                    deps/imguizmo/ImCurveEdit.cpp
+                                    deps/imguizmo/ImGradient.cpp
+                                    deps/imguizmo/ImSequencer.cpp
+                                    deps/imguizmo/example/imgui.cpp
+                                    deps/imguizmo/example/imgui_widgets.cpp
+                                    deps/imguizmo/example/imgui_draw.cpp
+                                    deps/imguizmo/example/main.cpp)
+target_include_directories(ImGuizmoExmaple PRIVATE  deps/imguizmo
+                                                    deps/imguizmo/example)
 
 
 add_subdirectory(deps/glm)
