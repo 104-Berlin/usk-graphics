@@ -38,8 +38,6 @@ add_library(ImGui STATIC    deps/imgui/imgui.cpp
 target_include_directories(ImGui PUBLIC deps/imgui
                                         deps/imguizmo)
                             
-add_executable(ImGuizmoExmaple deps/imguizmo/example/main.cpp)
-
 
 add_subdirectory(deps/glm)
 add_subdirectory(src/interface)
