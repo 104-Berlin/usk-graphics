@@ -9,7 +9,7 @@
 
 
 #include "graphics_mesh.h"
-
+#include "graphics_camera.h"
 
 
 #include "graphics_renderer_base.h"

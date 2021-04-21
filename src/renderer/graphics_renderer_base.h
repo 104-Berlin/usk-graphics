@@ -14,7 +14,7 @@ namespace Renderer {
         RRendererBase(Graphics::GContext* context);
         virtual ~RRendererBase() = default;
 
-        virtual void Begin(Graphics::GFrameBuffer* frameBuffer) = 0;
+        virtual void Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera) = 0;
         virtual void End() = 0;
     };
 
