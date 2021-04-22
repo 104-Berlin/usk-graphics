@@ -3,8 +3,43 @@
 using namespace Renderer;
 
 RCamera::RCamera(ECameraMode cameraMode, const glm::vec3& position)
-    : fCameraMode(cameraMode), fPosition(position), fForward(0.0f, 0.0f, -1.0f), fUpward(0.0f, 1.0f, 0.0f)
+    : fCameraMode(cameraMode), fPosition(position), fPitch(0.0f), fYaw(0.0f), fRoll(0.0f)
 {
+}
+
+void RCamera::MoveFarward(float amount) 
+{
+    fPosition += GetForward() * amount;
+}
+
+void RCamera::MoveRight(float amount) 
+{
+    fPosition += GetRight() * amount;
+}
+
+void RCamera::TurnRight(float angle) 
+{
+    fYaw += angle;
+}
+
+void RCamera::TurnUp(float angle) 
+{
+    fPitch += angle;
+}
+
+inline glm::vec3 RCamera::GetForward() 
+{
+    return {cosf(fYaw) * cosf(fPitch), sinf(fPitch), sinf(fYaw) * cosf(fPitch)};
+}
+
+inline glm::vec3 RCamera::GetRight() 
+{
+    return glm::cross(GetForward(), {0.0f, 1.0f, 0.0f});
+}
+
+inline glm::vec3 RCamera::GetUp() 
+{
+    return glm::cross(GetForward(), GetRight());
 }
 
 glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) 
@@ -19,5 +54,5 @@ glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int sc
 
 glm::mat4 RCamera::GetViewMatrix() 
 {
-    return glm::lookAt(fPosition, fPosition + fForward, fUpward);
+    return glm::lookAt(fPosition, fPosition + GetForward(), GetUp());
 }
