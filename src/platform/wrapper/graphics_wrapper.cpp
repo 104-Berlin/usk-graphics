@@ -23,22 +23,34 @@ const char* default_3d_vertex_shader = R"(
 
 layout(location = 0) in vec3 vPosition;
 
+out vec3 currentPos;
+
 uniform mat4 vp_matrix;
 
 void main()
 {
     gl_Position = vp_matrix * vec4(vPosition, 1.0);
+    currentPos = vPosition;
 }
 )";
 
 const char* default_3d_fragment_shader = R"(
 #version 330 core
 
+in vec3 currentPos;
+
 layout(location = 0) out vec4 fColor;
 
 void main()
 {
-    fColor = vec4(1, 0, 0, 1);
+    if (int(currentPos.x / 10) % 10 == 0 || int(currentPos.y / 10) % 10 == 0)
+    {
+        fColor = vec4(1, 0.5, 1, 1);
+    }
+    else 
+    {
+        fColor = vec4(0, 0.5, 0, 1);
+    }
 }
 )";
 

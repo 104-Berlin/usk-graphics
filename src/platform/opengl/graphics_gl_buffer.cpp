@@ -290,6 +290,10 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
 		{
             printf("Depth FrameBuffer is incomplete! %d\n", frameBufferResult);
 		}
+        else
+        {
+            printf("Sucesfully created framebuffer\n");
+        }
 			
 
 		glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));

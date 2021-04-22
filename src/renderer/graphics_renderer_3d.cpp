@@ -19,6 +19,8 @@ void RRenderer3D::Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera)
     fCurrentFrameBuffer = frameBuffer;
     fViewProjectionMatrix = camera->GetProjectionMatrix(frameBuffer->GetWidth(), frameBuffer->GetHeight()) * camera->GetViewMatrix();
 
+    fContext->EnableDepthTest(true);
+
     frameBuffer->Bind();
     fContext->Clear();
 }
@@ -58,6 +60,7 @@ void RRenderer3D::Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader*
 
 void RRenderer3D::End() 
 {
+    fContext->EnableDepthTest(false);
     fCurrentFrameBuffer->Unbind();
     fCurrentFrameBuffer = nullptr;
 }

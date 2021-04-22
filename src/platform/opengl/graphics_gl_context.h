@@ -28,10 +28,13 @@ namespace GL {
 
     class GLContext : public Graphics::GContext
     {
+    private:
+        bool fDepthTestEnabled;
     public:
         virtual void Init(void* initData) override;
 
-        virtual void Clear(float r = 0.0f, float g = 0.0f, float b = 0.0f, unsigned char GCLEAROPTIONS = 0) override;
+        virtual void Clear(float r = 0.0f, float g = 0.0f, float b = 0.0f, unsigned char GCLEAROPTIONS = GCLEAROPTION_COLOR_BUFFER | GCLEAROPTION_DEPTH_BUFFER) override;
+        virtual void EnableDepthTest(bool enable) override;
 
         virtual void DrawElements(size_t count, Graphics::GIndexType indexType, Graphics::GDrawMode drawMode) override;
         virtual void DrawArrays(size_t start, size_t count, Graphics::GDrawMode drawMode) override;
