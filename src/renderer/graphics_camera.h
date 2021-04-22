@@ -66,15 +66,15 @@ namespace Renderer {
         /**
          * @return The vector pointing forward.
          */
-        inline glm::vec3 GetForward() const;
+        glm::vec3 GetForward() const;
         /**
          * @return The vector pointing to the right.
          */
-        inline glm::vec3 GetRight() const;
+        glm::vec3 GetRight() const;
         /**
          * @return The vector pointing upward.
          */
-        inline glm::vec3 GetUp() const;
+        glm::vec3 GetUp() const;
 
         /**
          * @param position New position of camera.
