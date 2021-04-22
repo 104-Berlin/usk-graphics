@@ -42,6 +42,11 @@ inline glm::vec3 RCamera::GetUp()
     return glm::cross(GetForward(), GetRight());
 }
 
+inline const glm::vec3& RCamera::GetPosition() const
+{
+    return fPosition;
+}
+
 glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) 
 {
     switch (fCameraMode)
