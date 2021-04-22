@@ -17,7 +17,7 @@ void RRenderer3D::Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera)
     }
 
     fCurrentFrameBuffer = frameBuffer;
-    fViewProjectionMatrix = camera->GetViewMatrix() * camera->GetProjectionMatrix(frameBuffer->GetWidth(), frameBuffer->GetHeight());
+    fViewProjectionMatrix = camera->GetProjectionMatrix(frameBuffer->GetWidth(), frameBuffer->GetHeight()) * camera->GetViewMatrix();
 
     frameBuffer->Bind();
     fContext->Clear();

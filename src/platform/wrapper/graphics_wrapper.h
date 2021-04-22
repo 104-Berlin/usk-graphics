@@ -4,6 +4,10 @@
 #include "imgui.h"
 #include "ImGuizmo.h"
 
+#ifdef G_USE_GLFW
+#include "graphics_glfw_keybinds.h"
+#endif
+
 #ifdef G_WIN
     #ifdef G_EXPORT_WRAPPER
         #define G_API __declspec(dllexport)

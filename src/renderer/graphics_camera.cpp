@@ -17,6 +17,11 @@ void RCamera::MoveRight(float amount)
     fPosition += GetRight() * amount;
 }
 
+void RCamera::MoveUp(float amount) 
+{
+    fPosition += GetUp() * amount;
+}
+
 void RCamera::TurnRight(float angle) 
 {
     fYaw += angle;
@@ -29,17 +34,17 @@ void RCamera::TurnUp(float angle)
 
 glm::vec3 RCamera::GetForward() const
 {
-    return {cosf(fYaw) * cosf(fPitch), sinf(fPitch), sinf(fYaw) * cosf(fPitch)};
+    return glm::normalize(glm::vec3{sinf(fYaw) * cosf(fPitch), sinf(fPitch), cosf(fYaw) * cosf(fPitch)});
 }
 
 glm::vec3 RCamera::GetRight() const
 {
-    return glm::cross(GetForward(), {0.0f, 1.0f, 0.0f});
+    return glm::normalize(glm::cross(GetForward(), {0.0f, 1.0f, 0.0f}));
 }
 
 glm::vec3 RCamera::GetUp() const
 {
-    return glm::cross(GetForward(), GetRight());
+    return glm::normalize(glm::cross(GetRight(), GetForward()));
 }
 
 void RCamera::SetPosition(const glm::vec3& position) 

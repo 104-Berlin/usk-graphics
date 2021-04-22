@@ -53,6 +53,11 @@ namespace Renderer {
          */
         void MoveRight(float amount);
         /**
+         * Moves the camera up. Give negative value and the camera will move the the bottom.
+         * @param amount The distance to move
+         */
+        void MoveUp(float amount);
+        /**
          * Turns the camera around the z-axis. Positive values will result in a right turn.
          * @param angle The angle to rotate. Use radian here.
          */
