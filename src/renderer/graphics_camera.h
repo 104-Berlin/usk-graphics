@@ -84,7 +84,7 @@ namespace Renderer {
         /**
          * @return Current position of the camera
          */
-        inline glm::vec3 GetPosition() const;
+        const glm::vec3& GetPosition() const;
 
         glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight);
         glm::mat4 GetViewMatrix();
