@@ -27,17 +27,17 @@ void RCamera::TurnUp(float angle)
     fPitch += angle;
 }
 
-inline glm::vec3 RCamera::GetForward() 
+inline glm::vec3 RCamera::GetForward() const
 {
     return {cosf(fYaw) * cosf(fPitch), sinf(fPitch), sinf(fYaw) * cosf(fPitch)};
 }
 
-inline glm::vec3 RCamera::GetRight() 
+inline glm::vec3 RCamera::GetRight() const
 {
     return glm::cross(GetForward(), {0.0f, 1.0f, 0.0f});
 }
 
-inline glm::vec3 RCamera::GetUp() 
+inline glm::vec3 RCamera::GetUp() const
 {
     return glm::cross(GetForward(), GetRight());
 }
@@ -47,7 +47,7 @@ void RCamera::SetPosition(const glm::vec3& position)
     fPosition = position;
 }
 
-inline const glm::vec3& RCamera::GetPosition() const
+glm::vec3 RCamera::GetPosition() const
 {
     return fPosition;
 }

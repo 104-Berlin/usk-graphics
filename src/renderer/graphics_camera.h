@@ -66,15 +66,15 @@ namespace Renderer {
         /**
          * @return The vector pointing forward.
          */
-        inline glm::vec3 GetForward();
+        inline glm::vec3 GetForward() const;
         /**
          * @return The vector pointing to the right.
          */
-        inline glm::vec3 GetRight();
+        inline glm::vec3 GetRight() const;
         /**
          * @return The vector pointing upward.
          */
-        inline glm::vec3 GetUp();
+        inline glm::vec3 GetUp() const;
 
         /**
          * @param position New position of camera.
@@ -84,7 +84,7 @@ namespace Renderer {
         /**
          * @return Current position of the camera
          */
-        inline const glm::vec3& GetPosition() const;
+        inline glm::vec3 GetPosition() const;
 
         glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight);
         glm::mat4 GetViewMatrix();
