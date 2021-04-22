@@ -7,7 +7,7 @@ RCamera::RCamera(ECameraMode cameraMode, const glm::vec3& position)
 {
 }
 
-void RCamera::MoveFarward(float amount) 
+void RCamera::MoveForward(float amount) 
 {
     fPosition += GetForward() * amount;
 }

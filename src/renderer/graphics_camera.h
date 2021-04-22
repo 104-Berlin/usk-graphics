@@ -46,7 +46,7 @@ namespace Renderer {
          * Moves the camera forward. Give negative value and the camera will move backwards.
          * @param amount The distance to move.
          */
-        void MoveFarward(float amount);
+        void MoveForward(float amount);
         /**
          * Moves the camera to the right. Give negative value and the camera will move to the left.
          * @param amount The distance to move.
