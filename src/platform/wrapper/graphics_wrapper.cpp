@@ -43,7 +43,7 @@ layout(location = 0) out vec4 fColor;
 
 void main()
 {
-    if (int(currentPos.x / 10) % 10 == 0 || int(currentPos.y / 10) % 10 == 0)
+    if (int(currentPos.x / 10) % 10 == 0 || int(currentPos.z / 10) % 10 == 0)
     {
         fColor = vec4(1, 0.5, 1, 1);
     }
