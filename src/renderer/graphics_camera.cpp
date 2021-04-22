@@ -42,6 +42,11 @@ inline glm::vec3 RCamera::GetUp()
     return glm::cross(GetForward(), GetRight());
 }
 
+void RCamera::SetPosition(const glm::vec3& position) 
+{
+    fPosition = position;
+}
+
 inline const glm::vec3& RCamera::GetPosition() const
 {
     return fPosition;

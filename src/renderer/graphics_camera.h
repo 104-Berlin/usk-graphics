@@ -77,6 +77,11 @@ namespace Renderer {
         inline glm::vec3 GetUp();
 
         /**
+         * @param position New position of camera.
+         */
+        void SetPosition(const glm::vec3& position);
+
+        /**
          * @return Current position of the camera
          */
         inline const glm::vec3& GetPosition() const;
