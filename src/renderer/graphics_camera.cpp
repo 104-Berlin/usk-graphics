@@ -47,7 +47,7 @@ void RCamera::SetPosition(const glm::vec3& position)
     fPosition = position;
 }
 
-glm::vec3 RCamera::GetPosition() const
+inline glm::vec3 RCamera::GetPosition() const
 {
     return fPosition;
 }
