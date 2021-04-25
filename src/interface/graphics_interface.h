@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <functional>
 
 #include "glm/glm.hpp"
 #define GLM_ENABLE_EXPERIMENTAL

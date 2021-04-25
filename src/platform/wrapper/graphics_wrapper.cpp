@@ -70,7 +70,7 @@ GContext* Wrapper::GetMainContext()
     return mainContext;
 }
 
-void Wrapper::RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*))
+void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, std::function<void()> RenderCallback, std::function<void()> RenderImGui, std::function<void()> CleanUp, void(*SetImGuiContext)(ImGuiContext*))
 {
     GWindow* window = nullptr;
     mainContext = nullptr;

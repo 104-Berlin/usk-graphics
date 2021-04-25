@@ -28,7 +28,7 @@ namespace Graphics {
         G_API ImGuiContext* GetCurrentImGuiContext();
         G_API GContext* GetMainContext();
 
-        G_API void RunApplicationLoop(void(*OnInit)(GContext* context), void(*RenderCallback)(), void(*RenderImGui)(), void(*CleanUp)(), void(*SetImGuiContext)(ImGuiContext*));
+        G_API void RunApplicationLoop(std::function<void(GContext* context)> initFunction, std::function<void()> RenderCallback, std::function<void()> RenderImGui, std::function<void()> CleanUp, void(*SetImGuiContext)(ImGuiContext*));
 
         G_API GVertexArray* CreateVertexArray();
         G_API GVertexBuffer* CreateVertexBuffer();
