@@ -39,6 +39,9 @@ namespace Graphics {
 
         G_API GShader* GetDefault3DShader();
 
+        G_API std::vector<std::string> OpenFileDialog(const std::string& title, const std::vector<std::string>& filters = {}, const std::string& defaultPath = "");
+        G_API std::string SaveFileDialog(const std::string& title, const std::vector<std::string>& allowedEndings = {});
+
        
     }
 }

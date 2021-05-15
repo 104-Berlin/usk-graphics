@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
 
-add_library(GPlatformWrapper SHARED graphics_wrapper.cpp)
+if(WIN32)
+    set(PLATFORM_SRC win32/platform_win32.cpp)
+elseif(APPLE)
+    set(PLATFORM_SRC macos/platform_macos.mm)
+endif(WIN32)
+
+
+add_library(GPlatformWrapper SHARED graphics_wrapper.cpp
+                                    ${PLATFORM_SRC})
 
 
 
