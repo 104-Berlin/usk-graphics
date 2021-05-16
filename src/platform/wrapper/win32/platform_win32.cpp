@@ -2,21 +2,37 @@
 
 #include <Windows.h>
 
+using namespace Graphics;
 
-ESharedBuffer GetFilterList(const std::vector<std::string>& filters)
+struct CharBuffer
+{
+    char* Buffer;
+
+    void Init(size_t size)
+    {
+        Buffer = new char[size];
+    }
+
+    void Delete()
+    {
+        delete[] Buffer;
+    }
+};
+
+CharBuffer GetFilterList(const std::vector<std::string>& filters)
 {
     // Example filter string: "(*.jpg;*.png;*.bmp)\0*.jpg;*.png;*.bmp\0"
         // Get the buffer length
-        //               2 * "("     all the ";"             all the "*"       Null Termination
-    size_t bufferLength = 2 + (filters.size() - 1) * 2 + filters.size() * 2 + 2;
+        //               2 * "("     all the ";"          all the "*" and "."  Null Termination
+    size_t bufferLength = 2 + (filters.size() - 1) * 2 + filters.size() * 4 +       2;
     for (const std::string& f : filters)
     {
         bufferLength += f.length() * 2;
     }
     // (*esc)\0*esc\0
-    ESharedBuffer filter;
-    filter.InitWith<char>(bufferLength);
-    char* ptr = filter.Data<char>();
+    CharBuffer buffer;
+    buffer.Init(bufferLength);
+    char* ptr = buffer.Buffer;
 
     *ptr = '(';
     ptr++;
@@ -26,6 +42,8 @@ ESharedBuffer GetFilterList(const std::vector<std::string>& filters)
         const std::string& f = filters[i];
 
         *ptr = '*';
+        ptr++;
+        *ptr = '.';
         ptr++;
         memcpy(ptr, f.c_str(), f.length());
         ptr += f.length();
@@ -49,6 +67,8 @@ ESharedBuffer GetFilterList(const std::vector<std::string>& filters)
 
         *ptr = '*';
         ptr++;
+        *ptr = '.';
+        ptr++;
         memcpy(ptr, f.c_str(), f.length());
         ptr += f.length();
 
@@ -62,14 +82,14 @@ ESharedBuffer GetFilterList(const std::vector<std::string>& filters)
 
     *ptr = '\0';
     ptr++;
-    return filter;
+    return buffer;
 }
 
 
 
-std::vector<std::string> Platform::OpenFileDialog(const std::string& title, const std::vector<std::string>& filters, const std::string& defaultPath)
+std::vector<std::string> Wrapper::OpenFileDialog(const std::string& title, const std::vector<std::string>& filters, const std::string& defaultPath)
 {
-    ESharedBuffer filter = GetFilterList(filters);
+    CharBuffer filter = GetFilterList(filters);
 
     OPENFILENAME ofn = {0}; 
     TCHAR szFile[260]={0};
@@ -78,24 +98,27 @@ std::vector<std::string> Platform::OpenFileDialog(const std::string& title, cons
     ofn.hwndOwner = NULL; 
     ofn.lpstrFile = szFile; 
     ofn.nMaxFile = sizeof(szFile); 
-    ofn.lpstrFilter = filter.Data<char>();
+    ofn.lpstrFilter = filter.Buffer;
     ofn.nFilterIndex = 1; 
     ofn.lpstrFileTitle = NULL; 
     ofn.nMaxFileTitle = 0; 
     ofn.lpstrInitialDir = NULL;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
+
     if(GetOpenFileName(&ofn) == TRUE)
     { 
     // use ofn.lpstrFile here
+        filter.Delete();
         return {ofn.lpstrFile};
     }
+    filter.Delete();
     return {};
 }
 
-std::string Platform::SaveFileDialog(const std::string& title, const std::vector<std::string>& allowedEndings)
+std::string Wrapper::SaveFileDialog(const std::string& title, const std::vector<std::string>& allowedEndings)
 {
-    ESharedBuffer filter = GetFilterList(allowedEndings);
+    CharBuffer filter = GetFilterList(allowedEndings);
 
     OPENFILENAME ofn = { 0 };
     TCHAR szFile[260] = { 0 };
@@ -104,7 +127,10 @@ std::string Platform::SaveFileDialog(const std::string& title, const std::vector
     ofn.hwndOwner = NULL;
     ofn.lpstrFile = szFile;
     ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = filter.Data<char>();
+    ofn.lpstrFilter = filter.Buffer;
+    if (allowedEndings.size() > 0) {
+        ofn.lpstrDefExt = allowedEndings[0].c_str();
+    }
     ofn.nFilterIndex = 1;
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
@@ -114,7 +140,9 @@ std::string Platform::SaveFileDialog(const std::string& title, const std::vector
     if (GetSaveFileName(&ofn) == TRUE)
     {
         // use ofn.lpstrFile here
+        filter.Delete();
         return ofn.lpstrFile;
     }
+    filter.Delete();
     return {};
 }
