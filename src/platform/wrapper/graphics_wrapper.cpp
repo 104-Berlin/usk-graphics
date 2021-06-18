@@ -160,7 +160,7 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
         {
             ImGuiViewport* viewport = ImGui::GetMainViewport();
             ImGui::SetNextWindowPos(viewport->Pos);
-            ImGui::SetNextWindowSize(viewport->Size);
+            ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, viewport->Size.y - 32));
             ImGui::SetNextWindowViewport(viewport->ID);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
