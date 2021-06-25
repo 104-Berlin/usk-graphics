@@ -38,7 +38,7 @@ void GLVertexBuffer::SetData(unsigned char* data, size_t data_size)
 
     Graphics::GSharedBuffer sharedBuffer;
     sharedBuffer.InitWith<unsigned char>(data, data_size);
-    G_RENDERCMD_S1(sharedBuffer, {
+    G_RENDERCMD1(sharedBuffer, {
         glCall(glBufferData(GL_ARRAY_BUFFER, sharedBuffer.GetSizeInByte(), sharedBuffer.Data(), GL_STATIC_DRAW));
     })
 }
@@ -183,15 +183,16 @@ void GLVertexArray::AddVertexBuffer(Graphics::GVertexBuffer* vertexBuffer)
 	int stride = layout.GetStride();
 	for (const auto& element : layout)
 	{
-		G_RENDERCMD_S2(element, stride, {
-			glCall(glEnableVertexAttribArray(self->fVertexBufferIndex));
-			glCall(glVertexAttribPointer(self->fVertexBufferIndex,
+        int bufferIndex = fVertexBufferIndex;
+		G_RENDERCMD3(element, stride, bufferIndex, {
+			glCall(glEnableVertexAttribArray(bufferIndex));
+			glCall(glVertexAttribPointer(bufferIndex,
 						element.GetComponentCount(),
 						ShaderDataTypeToOpenGLType(element.Type),
 						element.Normalized ? GL_TRUE : GL_FALSE,
 						stride, (const void*)element.Offset));
-			self->fVertexBufferIndex++;
 		});
+        fVertexBufferIndex++;
 	}
 }
 

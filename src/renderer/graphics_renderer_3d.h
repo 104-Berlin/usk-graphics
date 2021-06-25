@@ -13,6 +13,7 @@ namespace Renderer {
 
         virtual void Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera);
         void Submit(RMesh* mesh);
+        void Submit(RLine* line);
         void Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader = nullptr);
         virtual void End();
     };

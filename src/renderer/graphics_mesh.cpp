@@ -24,6 +24,24 @@ void RMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsig
     fIndices = indices;
     fIndexCount = indices.size();
 
+    UpdateBuffers();
+}
+
+void RMesh::BindToDraw() 
+{
+    if (fVertexArray)
+    {
+        fVertexArray->Bind();
+    }
+}
+
+size_t RMesh::GetIndexCount() const
+{
+    return fIndexCount;
+}
+
+void RMesh::UpdateBuffers() 
+{
     if (fVertexArray)
     {
         delete fVertexArray;
@@ -41,18 +59,28 @@ void RMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsig
     indexBuffer->SetData((unsigned char*)fIndices.data(), fIndices.size() * sizeof(unsigned int), sizeof(unsigned int));
 
     fVertexArray->AddVertexBuffer(vertexBuffer);
-    fVertexArray->SetIndexBuffer(indexBuffer);
+    fVertexArray->SetIndexBuffer(indexBuffer); 
 }
 
-void RMesh::BindToDraw() 
+RLine::RLine() 
+    : RMesh()
 {
-    if (fVertexArray)
-    {
-        fVertexArray->Bind();
-    }
+    fIndices = {0, 1};
+    fVertices = {{{0.0f, 0.0f, 0.0f}}, {{0.0f, 0.0f, 0.0f}}};
+    fIndexCount = 2;
+    UpdateBuffers();
 }
 
-size_t RMesh::GetIndexCount() const
+void RLine::SetStart(const glm::vec3& point) 
 {
-    return fIndexCount;
+    fVertices[0] = {point};
+    fStart = point;
+    UpdateBuffers();
+}
+
+void RLine::SetEnd(const glm::vec3& point) 
+{
+    fVertices[1] = {point};
+    fEnd = point;
+    UpdateBuffers();
 }

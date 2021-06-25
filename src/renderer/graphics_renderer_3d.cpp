@@ -40,6 +40,17 @@ void RRenderer3D::Submit(RMesh* mesh)
     fContext->DrawElements(mesh->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::TRIANGLES);
 }
 
+
+void RRenderer3D::Submit(RLine* line) 
+{
+    fDefaultShader->Bind();
+    fDefaultShader->SetUniformMat4("vp_matrix", fViewProjectionMatrix);
+
+    line->BindToDraw();
+
+    fContext->DrawElements(line->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::LINE_STRIP);
+}
+
 void RRenderer3D::Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader) 
 {
     Graphics::GShader* usedShader = shader;
@@ -57,6 +68,7 @@ void RRenderer3D::Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader*
 
     fContext->DrawElements(vertexArray->GetIndexBuffer()->GetIndexCount(), vertexArray->GetIndexBuffer()->GetIndexType(), Graphics::GDrawMode::TRIANGLES);
 }
+
 
 void RRenderer3D::End() 
 {
