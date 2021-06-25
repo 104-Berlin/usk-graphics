@@ -15,13 +15,24 @@ namespace Renderer {
         size_t                      fIndexCount;
 
         Graphics::GVertexArray*     fVertexArray;
+        Graphics::GVertexBuffer*    fVertexBuffer;
     public:
         RMesh();
-        ~RMesh();
+        virtual ~RMesh();
 
-        void SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int> indices);
+        void SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
         void BindToDraw();
         size_t GetIndexCount() const;
+    };
+
+    class RLine : public RMesh
+    {
+    private:
+        double fThickness;
+    public:
+        RLine();
+
+        
     };
 
 }

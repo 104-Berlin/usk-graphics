@@ -11,14 +11,24 @@ RMesh::RMesh()
 
 RMesh::~RMesh() 
 {
-    
+    if (fVertexArray)
+    {
+        delete fVertexArray;
+        fVertexArray = nullptr;
+    }
 }
 
-void RMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int> indices) 
+void RMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) 
 {
     fVertices = vertices;
     fIndices = indices;
     fIndexCount = indices.size();
+
+    if (fVertexArray)
+    {
+        delete fVertexArray;
+        fVertexArray = nullptr;
+    }
 
     fVertexArray = Graphics::Wrapper::CreateVertexArray();
 
