@@ -62,7 +62,7 @@ glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int sc
     if (screenWidth == 0 || screenHeight == 0) { return glm::mat4(); }
     switch (fCameraMode)
     {
-    case ECameraMode::ORTHOGRAPHIC: return glm::ortho(-(float)screenWidth/2, (float)screenWidth/2, -(float)screenHeight/2, (float)screenHeight/2);
+    case ECameraMode::ORTHOGRAPHIC: return glm::ortho(0.0f, -(float)screenWidth, (float)screenHeight, 0.0f);
     case ECameraMode::PERSPECTIVE: return glm::perspective(90.0f, (float)screenWidth/(float)screenHeight, 0.001f, 100000.0f);
     }
     return glm::mat4();

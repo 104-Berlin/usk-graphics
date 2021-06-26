@@ -10,6 +10,7 @@ namespace GL {
         case Graphics::GIndexType::UNSIGNED_SHORT:  return GL_UNSIGNED_SHORT;
         case Graphics::GIndexType::UNSIGNED_INT :   return GL_UNSIGNED_INT;
         }
+        return GL_INT;
     }
 
     static GLenum DrawModeToOpenGLMode(Graphics::GDrawMode mode)
@@ -24,6 +25,7 @@ namespace GL {
         case Graphics::GDrawMode::TRIANGLE_FAN:    return GL_TRIANGLE_FAN;
         case Graphics::GDrawMode::TRIANGLES:       return GL_TRIANGLES;
         }
+        return GL_TRIANGLES;
     }
 
     class GLContext : public Graphics::GContext

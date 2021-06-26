@@ -5,72 +5,49 @@ using namespace GL;
 GLVertexBuffer::GLVertexBuffer() 
     : fRenderId(0)
 {
-    G_RENDERCMD_S({
-        glCall(glGenBuffers(1, &self->fRenderId));
-    })
+    glCall(glGenBuffers(1, &fRenderId));
 }
 
 GLVertexBuffer::~GLVertexBuffer() 
 {
-    GLuint ID = fRenderId;
-    G_RENDERCMD1(ID, {
-        glCall(glDeleteBuffers(1, &ID));
-    })
+    glCall(glDeleteBuffers(1, &fRenderId));
 }
 
 void GLVertexBuffer::Bind() const
 {
-    G_RENDERCMD_S({
-        glCall(glBindBuffer(GL_ARRAY_BUFFER, self->fRenderId));
-    })
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, fRenderId));
 }
 
 void GLVertexBuffer::Unbind() const
 {
-    G_RENDERCMD({
-        glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    })
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 void GLVertexBuffer::SetData(unsigned char* data, size_t data_size) 
 {
     Bind();
-
-    Graphics::GSharedBuffer sharedBuffer;
-    sharedBuffer.InitWith<unsigned char>(data, data_size);
-    G_RENDERCMD1(sharedBuffer, {
-        glCall(glBufferData(GL_ARRAY_BUFFER, sharedBuffer.GetSizeInByte(), sharedBuffer.Data(), GL_STATIC_DRAW));
-    })
+    glCall(glBufferData(GL_ARRAY_BUFFER, data_size, data, GL_STATIC_DRAW));
 }
 
 GLIndexBuffer::GLIndexBuffer() 
     : fRenderId(0), fIndexCount(0)
 {
-    G_RENDERCMD_S({
-        glCall(glGenBuffers(1, &self->fRenderId));
-    })
+    glCall(glGenBuffers(1, &fRenderId));
 }
 
 GLIndexBuffer::~GLIndexBuffer() 
 {
-    GLuint ID = fRenderId;
-    G_RENDERCMD1(ID, {
-        glCall(glDeleteBuffers(1, &ID));
-    })
+    glCall(glDeleteBuffers(1, &fRenderId));
 }
 
 void GLIndexBuffer::Bind() const 
 {
-    G_RENDERCMD_S({
-        glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->fRenderId));
-    })
+    glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fRenderId));
 }
 
 void GLIndexBuffer::Unbind() const 
 {
-    G_RENDERCMD_S({
-        glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    })
+    glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 size_t GLIndexBuffer::GetIndexCount() const 
@@ -108,24 +85,18 @@ void GLIndexBuffer::SetData(unsigned char* data, size_t size_in_bytes, size_t el
         printf("Cant set Data of IndexBuffer. Size in bytes is not devidable by element size!\n");
         return;
     }
-    Graphics::GSharedBuffer sharedBuffer;
-    sharedBuffer.InitWith<unsigned char>(data, size_in_bytes);
 
     fIndexCount = size_in_bytes / element_size;
 
 
     Bind();
-    G_RENDERCMD_S1(sharedBuffer, {
-        glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sharedBuffer.GetSizeInByte(), sharedBuffer.Data(), GL_STATIC_DRAW));
-    })
+    glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_in_bytes, data, GL_STATIC_DRAW));
 }
 
 GLVertexArray::GLVertexArray() 
     : fRenderId(0), fIndexBuffer(nullptr), fVertexBufferIndex(0)
 {
-    G_RENDERCMD_S({
-        glCall(glGenVertexArrays(1, &self->fRenderId));
-    })
+    glCall(glGenVertexArrays(1, &fRenderId));
 }
 
 GLVertexArray::~GLVertexArray() 
@@ -140,16 +111,12 @@ GLVertexArray::~GLVertexArray()
     }
     fVertexBuffers.clear();
     GLuint ID = fRenderId;
-    G_RENDERCMD1(ID, {
-        glCall(glDeleteVertexArrays(1, &ID));
-    })
+    glCall(glDeleteVertexArrays(1, &fRenderId));
 }
 
 void GLVertexArray::Bind() const 
 {
-    G_RENDERCMD_S({
-        glCall(glBindVertexArray(self->fRenderId));
-    })
+    glCall(glBindVertexArray(fRenderId));
     for (Graphics::GVertexBuffer* vb : fVertexBuffers)
     {
         vb->Bind();
@@ -162,9 +129,7 @@ void GLVertexArray::Bind() const
 
 void GLVertexArray::Unbind() const 
 {
-    G_RENDERCMD({
-        glCall(glBindVertexArray(0));
-    })
+    glCall(glBindVertexArray(0));
 }
 
 void GLVertexArray::AddVertexBuffer(Graphics::GVertexBuffer* vertexBuffer) 
@@ -183,15 +148,12 @@ void GLVertexArray::AddVertexBuffer(Graphics::GVertexBuffer* vertexBuffer)
 	int stride = layout.GetStride();
 	for (const auto& element : layout)
 	{
-        int bufferIndex = fVertexBufferIndex;
-		G_RENDERCMD3(element, stride, bufferIndex, {
-			glCall(glEnableVertexAttribArray(bufferIndex));
-			glCall(glVertexAttribPointer(bufferIndex,
-						element.GetComponentCount(),
-						ShaderDataTypeToOpenGLType(element.Type),
-						element.Normalized ? GL_TRUE : GL_FALSE,
-						stride, (const void*)element.Offset));
-		});
+        glCall(glEnableVertexAttribArray(fVertexBufferIndex));
+        glCall(glVertexAttribPointer(fVertexBufferIndex,
+                    element.GetComponentCount(),
+                    ShaderDataTypeToOpenGLType(element.Type),
+                    element.Normalized ? GL_TRUE : GL_FALSE,
+                    stride, (const void*)element.Offset));
         fVertexBufferIndex++;
 	}
 }
@@ -218,14 +180,16 @@ GLFrameBuffer::GLFrameBuffer(unsigned int width, unsigned int height, Graphics::
 
 GLFrameBuffer::~GLFrameBuffer() 
 {
-    GLuint ID = fRenderId;
-    GLuint colorAttach = fColorAttachment;
-    GLuint depthAttach = fDepthAttachment;
-    G_RENDERCMD3(ID, colorAttach, depthAttach, {
-        glCall(glDeleteFramebuffers(1, &ID));
-		glCall(glDeleteTextures(1, &colorAttach));
-		glCall(glDeleteTextures(1, &depthAttach));
-    })
+    GLint currentFbo;
+    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentFbo);
+
+    if (currentFbo == fRenderId)
+    {
+    }
+    glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    glCall(glDeleteFramebuffers(1, &fRenderId));
+    glCall(glDeleteTextures(1, &fColorAttachment));
+    glCall(glDeleteTextures(1, &fDepthAttachment));
 }
 
 void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format) 
@@ -237,68 +201,60 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
 	fHeight = height;
     fFormat = format;
 
-
-	G_RENDERCMD_S({
-
-		if (self->fRenderId)
-		{
-			glCall(glDeleteFramebuffers(1, &self->fRenderId));
-		}
-		
-		if (self->fDepthAttachment)
-		{
-			glCall(glDeleteTextures(1, &self->fDepthAttachment));
-		}
-		
-		if (self->fColorAttachment) 
-		{
-			glCall(glDeleteTextures(1, &self->fColorAttachment));
-		}
+    if (fRenderId)
+    {
+        glCall(glDeleteFramebuffers(1, &fRenderId));
+    }
+    
+    if (fDepthAttachment)
+    {
+        glCall(glDeleteTextures(1, &fDepthAttachment));
+    }
+    
+    if (fColorAttachment) 
+    {
+        glCall(glDeleteTextures(1, &fColorAttachment));
+    }
 
 
-		glCall(glGenFramebuffers(1, &self->fRenderId));
-		glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->fRenderId));
+    glCall(glGenFramebuffers(1, &fRenderId));
+    glCall(glBindFramebuffer(GL_FRAMEBUFFER, fRenderId));
 
-		
+    
 
-		glCall(glGenTextures(1, &self->fColorAttachment));
-		glCall(glBindTexture(GL_TEXTURE_2D, self->fColorAttachment));
+    glCall(glGenTextures(1, &fColorAttachment));
+    glCall(glBindTexture(GL_TEXTURE_2D, fColorAttachment));
 
-		if (self->fFormat == Graphics::GFrameBufferFormat::RGBA16F)
-		{
-			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, self->fWidth, self->fHeight, 0, GL_RGBA, GL_FLOAT, nullptr));
-		}
-		else if (self->fFormat == Graphics::GFrameBufferFormat::RGBA8)
-		{
-			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self->fWidth, self->fHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
-		}
+    if (fFormat == Graphics::GFrameBufferFormat::RGBA16F)
+    {
+        glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, fWidth, fHeight, 0, GL_RGBA, GL_FLOAT, nullptr));
+    }
+    else if (fFormat == Graphics::GFrameBufferFormat::RGBA8)
+    {
+        glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fWidth, fHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
+    }
 
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        glCall(glBindTexture(GL_TEXTURE_2D, 0));
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    glCall(glBindTexture(GL_TEXTURE_2D, 0));
+    
+    
+    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fColorAttachment, 0));
+
+    glCall(glGenTextures(1, &fDepthAttachment));
+    glCall(glBindTexture(GL_TEXTURE_2D, fDepthAttachment));
+    glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, fWidth, fHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL));
+
+    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, fDepthAttachment, 0));
+
+    GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;
+    if ((frameBufferResult = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        printf("Depth FrameBuffer is incomplete! %d\n", frameBufferResult);
+    }
         
-        
-		glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->fColorAttachment, 0));
 
-		glCall(glGenTextures(1, &self->fDepthAttachment));
-		glCall(glBindTexture(GL_TEXTURE_2D, self->fDepthAttachment));
-		glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, self->fWidth, self->fHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL));
-
-		glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, self->fDepthAttachment, 0));
-
-        GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;
-		if ((frameBufferResult = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
-		{
-            printf("Depth FrameBuffer is incomplete! %d\n", frameBufferResult);
-		}
-        else
-        {
-            printf("Sucesfully created framebuffer\n");
-        }
-			
-
-		glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	})
+    glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 unsigned int GLFrameBuffer::GetWidth() const
@@ -313,17 +269,13 @@ unsigned int GLFrameBuffer::GetHeight() const
 
 void GLFrameBuffer::Bind() const
 {
-    G_RENDERCMD_S({
-        glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->fRenderId));
-        glCall(glViewport(0, 0, self->fWidth, self->fHeight));
-    })
+    glCall(glBindFramebuffer(GL_FRAMEBUFFER, fRenderId));
+    glCall(glViewport(0, 0, fWidth, fHeight));
 }
 
 void GLFrameBuffer::Unbind() const
 {
-    G_RENDERCMD({
-			glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	})
+    glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 unsigned int GLFrameBuffer::GetColorAttachment() const
