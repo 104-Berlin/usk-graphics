@@ -14,4 +14,5 @@
 
 #include "graphics_renderer_base.h"
 #include "graphics_renderer_3d.h"
+#include "graphics_renderer_2d.h"
 #include "graphics_renderer_imgui.h"
