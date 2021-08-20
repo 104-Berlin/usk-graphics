@@ -6,7 +6,7 @@ using namespace Renderer;
 
 
 
-const std::vector<RMesh::Vertex> vertices = {
+const std::vector<GMesh::Vertex> vertices = {
     {{-0.5f, 0.5f, 0.0f}},
     {{ 0.5f, 0.5f, 0.0f}},
     {{ 0.0f, -0.5f, 0.0f}},
@@ -18,7 +18,7 @@ const std::vector<unsigned int> indices = {
 
 static Renderer::RRenderer3D renderer;
 static GFrameBuffer* frameBuffer = nullptr;
-static RMesh* mesh = new RMesh();
+static GMesh* mesh = new GMesh();
 static RCamera camera(ECameraMode::ORTHOGRAPHIC);
 
 void Init(GContext* context)
@@ -48,7 +48,7 @@ int main()
 void Render() 
 {
     renderer.Begin(frameBuffer, &camera);
-    renderer.Submit(mesh);
+
     renderer.End();
 }
 

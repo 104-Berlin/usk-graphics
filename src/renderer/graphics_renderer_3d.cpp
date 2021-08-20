@@ -25,32 +25,6 @@ void RRenderer3D::Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera)
     fContext->Clear();
 }
 
-void RRenderer3D::Submit(RMesh* mesh) 
-{
-    if (!fDefaultShader)
-    {
-        printf("Not shader found to render vertexarray!\n");
-        return;
-    }
-
-    fDefaultShader->Bind();
-    fDefaultShader->SetUniformMat4("vp_matrix", fViewProjectionMatrix);
-    mesh->BindToDraw();
-
-    fContext->DrawElements(mesh->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::TRIANGLES);
-}
-
-
-void RRenderer3D::Submit(RLine* line) 
-{
-    fDefaultShader->Bind();
-    fDefaultShader->SetUniformMat4("vp_matrix", fViewProjectionMatrix);
-
-    line->BindToDraw();
-
-    fContext->DrawElements(line->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::LINE_STRIP);
-}
-
 void RRenderer3D::Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader) 
 {
     Graphics::GShader* usedShader = shader;
