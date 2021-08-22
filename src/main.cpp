@@ -16,23 +16,28 @@ const std::vector<unsigned int> indices = {
     0, 1, 2
 };
 
-static Renderer::RRenderer3D renderer;
+static Renderer::RRenderer3D* renderer = nullptr;
 static GFrameBuffer* frameBuffer = nullptr;
 static GMesh* mesh = new GMesh();
 static RCamera camera(ECameraMode::ORTHOGRAPHIC);
+static GScene* scene = new GScene();
 
 void Init(GContext* context)
 {
-    renderer = RRenderer3D(context);
     frameBuffer = Wrapper::CreateFrameBuffer(1270, 720, Graphics::GFrameBufferFormat::RGBA16F);
+    renderer = new RRenderer3D(context, frameBuffer);
 
     mesh->SetData(vertices, indices);
+    
+    scene->Add(mesh);
 }
 
 void CleanUp()
 {
     delete frameBuffer;
     delete mesh;
+    delete scene;
+    delete renderer;
 }
 
 void Render();
@@ -47,9 +52,7 @@ int main()
 
 void Render() 
 {
-    renderer.Begin(frameBuffer, &camera);
-
-    renderer.End();
+    renderer->Render(scene, &camera);
 }
 
 void RenderImGui()

@@ -6,14 +6,12 @@ namespace Renderer {
     {
     private:
         Graphics::GShader*          fDefaultShader;
-        Graphics::GFrameBuffer*     fCurrentFrameBuffer;
+        Graphics::GFrameBuffer*     fFrameBuffer;
         glm::mat4                   fViewProjectionMatrix;
     public:
-        RRenderer3D(Graphics::GContext* context = nullptr);
+        RRenderer3D(Graphics::GContext* context, Graphics::GFrameBuffer* frameBuffer);
 
-        virtual void Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera);
-        void Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader = nullptr);
-        virtual void End();
+        virtual void Render(Graphics::GScene* scene, RCamera* camera);
     };
     
 

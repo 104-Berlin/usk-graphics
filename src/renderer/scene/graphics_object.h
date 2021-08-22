@@ -36,6 +36,12 @@ namespace Graphics {
 
         void Add(GObject* object);
         void Attach(GObject* object);
+
+        const std::vector<GObject*>& GetChildren() const;
+
+
+        void Render(GContext* context);
+        virtual void OnRender(GContext* context) {};
     };
 
 }

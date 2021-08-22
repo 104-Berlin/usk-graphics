@@ -23,6 +23,7 @@ namespace Graphics {
         void BindToDraw();
         size_t GetIndexCount() const;
 
+        virtual void OnRender(GContext* context) override;
     protected:
         void UpdateBuffers();
     };

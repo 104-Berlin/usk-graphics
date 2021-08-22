@@ -40,6 +40,15 @@ size_t GMesh::GetIndexCount() const
     return fIndexCount;
 }
 
+void GMesh::OnRender(GContext* context) 
+{
+    fVertexArray->Bind();
+
+    context->DrawElements(fVertexArray->GetIndexBuffer()->GetIndexCount(), GIndexType::UNSIGNED_INT, GDrawMode::TRIANGLES);
+    
+    fVertexArray->Unbind();
+}
+
 void GMesh::UpdateBuffers() 
 {
     if (fVertexArray)

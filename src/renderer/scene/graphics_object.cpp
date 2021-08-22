@@ -3,7 +3,7 @@
 using namespace Graphics;
 
 GObject::GObject() 
-    :   fModelMatrix(),
+    :   fModelMatrix(1.0),
         fPosition(),
         fScale(glm::vec3(1.0f)),
         fRotation(),
@@ -87,7 +87,7 @@ void GObject::SetModelMatrix(const glm::mat4& modelMatrix)
 
 void GObject::UpdateMatrix() 
 {
-    glm::mat4 parentMatrix;
+    glm::mat4 parentMatrix(1.0);
     if (fParent)
     {
         parentMatrix = fParent->GetModelMatrix();
@@ -112,4 +112,14 @@ void GObject::Attach(GObject* object)
     fChildren.push_back(object);
     object->fParent = this;
     SetModelMatrix(modelMatrix);
+}
+
+const std::vector<GObject*>& GObject::GetChildren() const
+{
+    return fChildren;
+}
+
+void GObject::Render(GContext* context) 
+{
+    OnRender(context);
 }

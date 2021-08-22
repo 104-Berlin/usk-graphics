@@ -10,6 +10,8 @@ namespace Graphics {
         GScene();
 
         void Add(GObject* object);
+
+        void Traverse(const std::function<void(GObject*)>& fn);
     };
 
 }

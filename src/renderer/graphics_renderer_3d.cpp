@@ -1,52 +1,72 @@
 #include "graphics_renderer.h"
 
+
+const char* default_3d_vertex_shader = R"(
+#version 330 core
+
+layout(location = 0) in vec3 vPosition;
+
+out vec3 currentPos;
+
+uniform mat4 vp_matrix;
+uniform mat4 ml_matrix;
+
+void main()
+{
+    gl_Position = vp_matrix * ml_matrix * vec4(vPosition, 1.0);
+    currentPos = vPosition;
+}
+)";
+
+const char* default_3d_fragment_shader = R"(
+#version 330 core
+
+in vec3 currentPos;
+
+layout(location = 0) out vec4 fColor;
+
+void main()
+{
+    fColor = vec4(0, 0.5, 0, 1);
+}
+)";
+
+
 using namespace Renderer;
 
 
-RRenderer3D::RRenderer3D(Graphics::GContext* context) 
-    : RRendererBase(context), fCurrentFrameBuffer(nullptr), fViewProjectionMatrix(), fDefaultShader(Graphics::Wrapper::GetDefault3DShader())
+RRenderer3D::RRenderer3D(Graphics::GContext* context, Graphics::GFrameBuffer* frameBuffer) 
+    : RRendererBase(context), fFrameBuffer(frameBuffer), fViewProjectionMatrix(), fDefaultShader(Graphics::Wrapper::CreateShader())
 {
+    assert(context);
+    assert(frameBuffer);
+
+    fDefaultShader->Compile(default_3d_vertex_shader, default_3d_fragment_shader);
 }
 
-void RRenderer3D::Begin(Graphics::GFrameBuffer* frameBuffer, RCamera* camera) 
+void RRenderer3D::Render(Graphics::GScene* scene, RCamera* camera) 
 {
-    if (fCurrentFrameBuffer)
+    assert(fContext);
+    assert(fFrameBuffer);
+
+    if (!scene || !camera)  
     {
-        printf("Invalid framebuffer for rendering!");
+        printf("ERROR: Renderer3D::Renderer called with NULL argument. Can't proceed!\n");
         return;
     }
 
-    fCurrentFrameBuffer = frameBuffer;
-    fViewProjectionMatrix = camera->GetProjectionMatrix(frameBuffer->GetWidth(), frameBuffer->GetHeight()) * camera->GetViewMatrix();
-
-    fContext->EnableDepthTest(true);
-
-    frameBuffer->Bind();
+    fFrameBuffer->Bind();
     fContext->Clear();
-}
-
-void RRenderer3D::Submit(Graphics::GVertexArray* vertexArray, Graphics::GShader* shader) 
-{
-    Graphics::GShader* usedShader = shader;
-    if (!usedShader)
-    {
-        usedShader = fDefaultShader;
-    }
-    if (!usedShader)
-    {
-        printf("Not shader found to render vertexarray!\n");
-        return;
-    }
-    usedShader->Bind();
-    vertexArray->Bind();
-
-    fContext->DrawElements(vertexArray->GetIndexBuffer()->GetIndexCount(), vertexArray->GetIndexBuffer()->GetIndexType(), Graphics::GDrawMode::TRIANGLES);
-}
+    fDefaultShader->Bind();
+    glm::mat4 viewProjection = camera->GetProjectionMatrix(fFrameBuffer->GetWidth(), fFrameBuffer->GetHeight()) * camera->GetViewMatrix();   
+    fDefaultShader->SetUniformMat4("vp_matrix", viewProjection);
 
 
-void RRenderer3D::End() 
-{
-    fContext->EnableDepthTest(false);
-    fCurrentFrameBuffer->Unbind();
-    fCurrentFrameBuffer = nullptr;
+    scene->Traverse([this](Graphics::GObject* object){
+        fDefaultShader->SetUniformMat4("ml_matrix", object->GetModelMatrix());
+        object->Render(fContext);
+    });
+
+    fDefaultShader->Unbind();
+    fFrameBuffer->Unbind();
 }
