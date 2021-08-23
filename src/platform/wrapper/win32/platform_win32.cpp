@@ -21,6 +21,16 @@ struct CharBuffer
 
 CharBuffer GetFilterList(const std::vector<std::string>& filters)
 {
+    if (filters.size() == 0) 
+    { 
+        CharBuffer nullResultBuffer; 
+        nullResultBuffer.Init(1); 
+        char* ptr = nullResultBuffer.Buffer;
+        *ptr = '\0';
+        ptr++;
+        
+        return nullResultBuffer; 
+    }
     // Example filter string: "(*.jpg;*.png;*.bmp)\0*.jpg;*.png;*.bmp\0"
         // Get the buffer length
         //               2 * "("     all the ";"          all the "*" and "."  Null Termination

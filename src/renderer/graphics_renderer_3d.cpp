@@ -44,6 +44,14 @@ RRenderer3D::RRenderer3D(Graphics::GContext* context, Graphics::GFrameBuffer* fr
     fDefaultShader->Compile(default_3d_vertex_shader, default_3d_fragment_shader);
 }
 
+RRenderer3D::~RRenderer3D() 
+{
+    if (fDefaultShader)
+    {
+        delete fDefaultShader;
+    }
+}
+
 void RRenderer3D::Render(Graphics::GScene* scene, RCamera* camera) 
 {
     assert(fContext);
