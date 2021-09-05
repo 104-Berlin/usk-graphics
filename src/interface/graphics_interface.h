@@ -15,4 +15,5 @@
 #include "graphics_buffer.h"
 #include "graphics_shader.h"
 #include "graphics_context.h"
+#include "graphics_texture.h"
 #include "graphics_window.h"
