@@ -93,9 +93,10 @@ void GObject::UpdateMatrix()
         parentMatrix = fParent->GetModelMatrix();
     }
 
-    glm::mat4 localMatrix = glm::toMat4(fRotation);
-    glm::scale(localMatrix, fScale);
-    glm::translate(localMatrix, fPosition);
+    glm::mat4 localMatrix(1.0);
+    localMatrix *= glm::translate(glm::mat4(1.0f), fPosition);
+    localMatrix *= glm::toMat4(fRotation);
+    localMatrix *= glm::scale(glm::mat4(1.0f), fScale);
     localMatrix *= parentMatrix;
     fModelMatrix = localMatrix;
 }
