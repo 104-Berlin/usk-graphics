@@ -292,6 +292,14 @@ return nullptr;
 #endif
 }
 
+G_API GTexture2D* Wrapper::CreateTexture() 
+{
+#ifdef G_USE_OPENGL
+return new GL::GLTexture2D();
+#else
+return nullptr;
+#endif
+}
 
 G_API GShader* Wrapper::GetDefault3DShader() 
 {

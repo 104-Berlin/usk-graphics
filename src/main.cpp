@@ -60,6 +60,6 @@ void RenderImGui()
     ImGui::Begin("Test Frame");
     ImVec2 contentRegion = ImGui::GetContentRegionAvail();
     frameBuffer->Resize(contentRegion.x, contentRegion.y, GFrameBufferFormat::RGBA8);
-    ImGui::Image((ImTextureID)(unsigned long)frameBuffer->GetColorAttachment(), contentRegion);
+    ImGui::Image((ImTextureID)(unsigned long long)(unsigned long)frameBuffer->GetColorAttachment(), contentRegion);
     ImGui::End();
 }
