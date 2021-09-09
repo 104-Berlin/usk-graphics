@@ -6,6 +6,10 @@ GLTexture2D::GLTexture2D()
     : fRenderId(0)
 {
     glCall(glGenTextures(1, &fRenderId));
+    Bind();
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    Unbind();
 }
 
 GLTexture2D::~GLTexture2D() 
