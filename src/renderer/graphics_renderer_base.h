@@ -14,7 +14,7 @@ namespace Renderer {
         RRendererBase(Graphics::GContext* context);
         virtual ~RRendererBase() = default;
 
-        virtual void Render(Graphics::GScene* scene, RCamera* camera) {}
+        virtual void Render(RScene* scene, RCamera* camera) {}
     };
 
 }

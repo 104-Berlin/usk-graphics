@@ -1,17 +1,15 @@
 #pragma once
 
-namespace Graphics {
+namespace Renderer {
 
-    class GScene
+    class RScene : public RObject
     {
-    private:
-        std::vector<GObject*> fChildren;
     public:
-        GScene();
+        RScene();
 
-        void Add(GObject* object);
+        void Traverse(const std::function<void(RObject*)>& fn);
 
-        void Traverse(const std::function<void(GObject*)>& fn);
+        void DeleteObject(RObject* object);
     };
 
 }

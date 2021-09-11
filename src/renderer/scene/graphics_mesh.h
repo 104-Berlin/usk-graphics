@@ -1,8 +1,8 @@
 #pragma once
 
-namespace Graphics {
+namespace Renderer {
 
-    class GMesh : public GObject
+    class RMesh : public RObject
     {
     public:
         struct Vertex
@@ -16,19 +16,19 @@ namespace Graphics {
 
         Graphics::GVertexArray*     fVertexArray;
     public:
-        GMesh();
-        virtual ~GMesh();
+        RMesh();
+        virtual ~RMesh();
 
         void SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
         void BindToDraw();
         size_t GetIndexCount() const;
 
-        virtual void OnRender(GContext* context) override;
+        virtual void OnRender(Graphics::GContext* context) override;
     protected:
         void UpdateBuffers();
     };
 
-    class GLine : public GMesh
+    class GLine : public RMesh
     {
     private:
         double fThickness;

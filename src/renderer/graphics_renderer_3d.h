@@ -12,7 +12,7 @@ namespace Renderer {
         RRenderer3D(Graphics::GContext* context, Graphics::GFrameBuffer* frameBuffer);
         virtual ~RRenderer3D();
 
-        virtual void Render(Graphics::GScene* scene, RCamera* camera);
+        virtual void Render(RScene* scene, RCamera* camera);
     };
     
 

@@ -1,15 +1,15 @@
 #include "graphics_renderer.h"
 
-using namespace Graphics;
+using namespace Renderer;
 
 
-GMesh::GMesh() 
+RMesh::RMesh() 
     : fVertexArray(nullptr), fIndexCount(0)
 {
     
 }
 
-GMesh::~GMesh() 
+RMesh::~RMesh() 
 {
     if (fVertexArray)
     {
@@ -18,7 +18,7 @@ GMesh::~GMesh()
     }
 }
 
-void GMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) 
+void RMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) 
 {
     fVertices = vertices;
     fIndices = indices;
@@ -27,7 +27,7 @@ void GMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsig
     UpdateBuffers();
 }
 
-void GMesh::BindToDraw() 
+void RMesh::BindToDraw() 
 {
     if (fVertexArray)
     {
@@ -35,21 +35,21 @@ void GMesh::BindToDraw()
     }
 }
 
-size_t GMesh::GetIndexCount() const
+size_t RMesh::GetIndexCount() const
 {
     return fIndexCount;
 }
 
-void GMesh::OnRender(GContext* context) 
+void RMesh::OnRender(Graphics::GContext* context) 
 {
     fVertexArray->Bind();
 
-    context->DrawElements(fVertexArray->GetIndexBuffer()->GetIndexCount(), GIndexType::UNSIGNED_INT, GDrawMode::TRIANGLES);
+    context->DrawElements(fVertexArray->GetIndexBuffer()->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::TRIANGLES);
     
     fVertexArray->Unbind();
 }
 
-void GMesh::UpdateBuffers() 
+void RMesh::UpdateBuffers() 
 {
     if (fVertexArray)
     {
@@ -72,7 +72,7 @@ void GMesh::UpdateBuffers()
 }
 
 GLine::GLine() 
-    : GMesh()
+    : RMesh()
 {
     fIndices = {0, 1};
     fVertices = {{{0.0f, 0.0f, 0.0f}}, {{0.0f, 0.0f, 0.0f}}};

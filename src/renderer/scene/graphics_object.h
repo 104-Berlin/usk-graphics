@@ -1,9 +1,10 @@
 #pragma once
 
-namespace Graphics {
+namespace Renderer {
 
-    class GObject
+    class RObject
     {
+        friend class RScene;
     private:
         glm::mat4 fModelMatrix;
 
@@ -13,11 +14,11 @@ namespace Graphics {
 
         bool      fMatrixAutoUpdate;
 
-        GObject*              fParent;
-        std::vector<GObject*> fChildren;
+        RObject*              fParent;
+        std::vector<RObject*> fChildren;
     public:
-        GObject();
-        virtual ~GObject();
+        RObject();
+        virtual ~RObject();
 
         const glm::vec3& GetPosition() const;
         const glm::vec3& GetScale() const;
@@ -34,14 +35,18 @@ namespace Graphics {
         void SetModelMatrix(const glm::mat4& modelMatrix);
         void UpdateMatrix();
 
-        void Add(GObject* object);
-        void Attach(GObject* object);
+        void Add(RObject* object);
+        void Attach(RObject* object);
 
-        const std::vector<GObject*>& GetChildren() const;
+        const std::vector<RObject*>& GetChildren() const;
 
+        RObject* GetParent() const;
 
-        void Render(GContext* context);
-        virtual void OnRender(GContext* context) {};
+        void Render(Graphics::GContext* context);
+        virtual void OnRender(Graphics::GContext* context) {};
+
+    private:
+        void RemoveChild(RObject* object);
     };
 
 }

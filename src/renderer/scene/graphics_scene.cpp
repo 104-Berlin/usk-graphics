@@ -1,33 +1,35 @@
 #include "graphics_renderer.h"
 
-using namespace Graphics;
+using namespace Renderer;
 
-GScene::GScene() 
+RScene::RScene() 
 {
 
 }
 
-void GScene::Add(GObject* object) 
+void RScene::Traverse(const std::function<void(RObject*)>& fn) 
 {
-    fChildren.push_back(object);
-}
-
-void GScene::Traverse(const std::function<void(GObject*)>& fn) 
-{
-    std::function<void(GObject*, std::function<void(GObject*)>)> traverse_fn;
-    traverse_fn = [&traverse_fn](GObject* object, std::function<void(GObject*)> callback){
+    std::function<void(RObject*, std::function<void(RObject*)>)> traverse_fn;
+    traverse_fn = [&traverse_fn](RObject* object, std::function<void(RObject*)> callback){
         if (!object) { return; }
 
-        for (GObject* child : object->GetChildren())
+        for (RObject* child : object->GetChildren())
         {
             callback(child);
             traverse_fn(child, callback);
         }
     };
 
-    for (GObject* child : fChildren)
+    for (RObject* child : fChildren)
     {
         fn(child);
         traverse_fn(child, fn);
     }
+}
+
+void RScene::DeleteObject(RObject* object) 
+{
+    if (!object) { printf("WARN: Could not delete object. It was allready destroyed!"); return; }
+    object->GetParent()->RemoveChild(object);
+    delete object;
 }

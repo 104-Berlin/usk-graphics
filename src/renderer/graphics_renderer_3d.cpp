@@ -52,7 +52,7 @@ RRenderer3D::~RRenderer3D()
     }
 }
 
-void RRenderer3D::Render(Graphics::GScene* scene, RCamera* camera) 
+void RRenderer3D::Render(RScene* scene, RCamera* camera) 
 {
     assert(fContext);
     assert(fFrameBuffer);
@@ -70,7 +70,7 @@ void RRenderer3D::Render(Graphics::GScene* scene, RCamera* camera)
     fDefaultShader->SetUniformMat4("vp_matrix", viewProjection);
 
 
-    scene->Traverse([this](Graphics::GObject* object){
+    scene->Traverse([this](RObject* object){
         fDefaultShader->SetUniformMat4("ml_matrix", object->GetModelMatrix());
         object->Render(fContext);
     });

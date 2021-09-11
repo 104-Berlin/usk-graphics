@@ -1,8 +1,8 @@
 #include "graphics_renderer.h"
 
-using namespace Graphics;
+using namespace Renderer;
 
-GObject::GObject() 
+RObject::RObject() 
     :   fModelMatrix(1.0),
         fPosition(),
         fScale(glm::vec3(1.0f)),
@@ -13,52 +13,52 @@ GObject::GObject()
     
 }
 
-GObject::~GObject() 
+RObject::~RObject() 
 {
     
 }
 
-const glm::vec3& GObject::GetPosition() const
+const glm::vec3& RObject::GetPosition() const
 {
     return fPosition;
 }
 
-const glm::vec3& GObject::GetScale() const
+const glm::vec3& RObject::GetScale() const
 {
     return fScale;
 }
 
-const glm::quat& GObject::GetRotation() const
+const glm::quat& RObject::GetRotation() const
 {
     return fRotation;
 }
 
-void GObject::SetPosition(const glm::vec3& value) 
+void RObject::SetPosition(const glm::vec3& value) 
 {
     fPosition = value;
 }
 
-void GObject::SetScale(const glm::vec3& value) 
+void RObject::SetScale(const glm::vec3& value) 
 {
     fScale = value;
 }
 
-void GObject::SetRotation(const glm::quat& value) 
+void RObject::SetRotation(const glm::quat& value) 
 {
     fRotation = value;
 }
 
-void GObject::SetMatrixAutoUpdate(bool value) 
+void RObject::SetMatrixAutoUpdate(bool value) 
 {
     fMatrixAutoUpdate = value;
 }
 
-bool GObject::GetMatrixAutoUpdate() const
+bool RObject::GetMatrixAutoUpdate() const
 {
     return fMatrixAutoUpdate;
 }
 
-glm::mat4 GObject::GetModelMatrix()
+glm::mat4 RObject::GetModelMatrix()
 {
     if (fMatrixAutoUpdate)
     {
@@ -67,7 +67,7 @@ glm::mat4 GObject::GetModelMatrix()
     return fModelMatrix;
 }
 
-void GObject::SetModelMatrix(const glm::mat4& modelMatrix) 
+void RObject::SetModelMatrix(const glm::mat4& modelMatrix) 
 {
     glm::mat4 parentMat(1.0f);
     if (fParent)
@@ -85,7 +85,7 @@ void GObject::SetModelMatrix(const glm::mat4& modelMatrix)
     SetRotation(rotation);
 }
 
-void GObject::UpdateMatrix() 
+void RObject::UpdateMatrix() 
 {
     glm::mat4 parentMatrix(1.0);
     if (fParent)
@@ -101,13 +101,13 @@ void GObject::UpdateMatrix()
     fModelMatrix = localMatrix;
 }
 
-void GObject::Add(GObject* object) 
+void RObject::Add(RObject* object) 
 {
     fChildren.push_back(object);
     object->fParent = this;
 }
 
-void GObject::Attach(GObject* object) 
+void RObject::Attach(RObject* object) 
 {
     glm::mat4 modelMatrix = GetModelMatrix();
     fChildren.push_back(object);
@@ -115,12 +115,26 @@ void GObject::Attach(GObject* object)
     SetModelMatrix(modelMatrix);
 }
 
-const std::vector<GObject*>& GObject::GetChildren() const
+const std::vector<RObject*>& RObject::GetChildren() const
 {
     return fChildren;
 }
 
-void GObject::Render(GContext* context) 
+RObject* RObject::GetParent() const
+{
+    return fParent;
+}
+
+void RObject::Render(Graphics::GContext* context) 
 {
     OnRender(context);
+}
+
+void RObject::RemoveChild(RObject* object) 
+{
+    std::vector<RObject*>::iterator it = std::find(fChildren.begin(), fChildren.end(), object);
+    if (it != fChildren.end())
+    {
+        fChildren.erase(it);
+    }
 }
