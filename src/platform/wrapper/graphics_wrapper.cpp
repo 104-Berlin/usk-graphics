@@ -189,9 +189,9 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
 #ifdef G_USE_OPENGL
     ImGui_ImplGlfw_InitForOpenGL(((GLFW::GLFWWindow*)window)->GetGlfwWindow(), true);
     ImGui_ImplOpenGL3_Init();
-    ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
 #endif
 #endif
+
 
     if (SetImGuiContext)
     {
@@ -201,6 +201,10 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
     {
         OnInit(mainContext);
     }
+
+#ifdef G_USE_OPENGL
+    ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
+#endif
 
     while (window->IsOpen())
     {
