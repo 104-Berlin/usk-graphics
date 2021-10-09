@@ -295,12 +295,12 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
         window->SwapBuffer();
     }     
 
-#ifdef G_USE_GLFW
-    ImGui_ImplGlfw_Shutdown();
-#endif
 #ifdef G_USE_OPENGL
     ImGui_ImplOpenGL3_Shutdown();
 #endif  
+#ifdef G_USE_GLFW
+    ImGui_ImplGlfw_Shutdown();
+#endif
     ImGui::DestroyContext();   
 
     if (CleanUp)
