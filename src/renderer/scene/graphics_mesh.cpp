@@ -70,26 +70,3 @@ void RMesh::UpdateBuffers()
     fVertexArray->AddVertexBuffer(vertexBuffer);
     fVertexArray->SetIndexBuffer(indexBuffer); 
 }
-
-GLine::GLine() 
-    : RMesh()
-{
-    fIndices = {0, 1};
-    fVertices = {{{0.0f, 0.0f, 0.0f}}, {{0.0f, 0.0f, 0.0f}}};
-    fIndexCount = 2;
-    UpdateBuffers();
-}
-
-void GLine::SetStart(const glm::vec3& point) 
-{
-    fVertices[0] = {point};
-    fStart = point;
-    UpdateBuffers();
-}
-
-void GLine::SetEnd(const glm::vec3& point) 
-{
-    fVertices[1] = {point};
-    fEnd = point;
-    UpdateBuffers();
-}

@@ -28,18 +28,4 @@ namespace Renderer {
         void UpdateBuffers();
     };
 
-    class GLine : public RMesh
-    {
-    private:
-        double fThickness;
-
-        glm::vec3 fStart;
-        glm::vec3 fEnd;
-    public:
-        GLine();
-
-        void SetStart(const glm::vec3& point);
-        void SetEnd(const glm::vec3& point);
-    };
-
 }

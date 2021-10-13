@@ -13,6 +13,7 @@
 #include "scene/graphics_scene.h"
 #include "scene/graphics_mesh.h"
 #include "scene/graphics_texture_object.h"
+#include "scene/graphics_line.h"
 
 #include "graphics_camera.h"
 

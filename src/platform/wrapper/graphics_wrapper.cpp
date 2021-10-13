@@ -172,6 +172,7 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
     ImGui::CreateContext();
     imguiContext = ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     
