@@ -21,6 +21,8 @@ namespace Renderer {
         const glm::vec3& GetControll2() const;
         void SetControll2(const glm::vec3& pos);
         const glm::vec3& GetControll1() const;
+        void SetThickness(float thickness);
+        float GetThickness() const;
     private:
         void RegenMesh();
 

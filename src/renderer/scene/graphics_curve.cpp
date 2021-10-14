@@ -52,6 +52,16 @@ const glm::vec3& RBezierCurve::GetControll1() const
     return fControll2;
 }
 
+void RBezierCurve::SetThickness(float thickness) 
+{
+    fThickness = thickness;
+}
+
+float RBezierCurve::GetThickness() const
+{
+    return fThickness;
+}
+
 void RBezierCurve::RegenMesh() 
 {
     fVertices.clear();
@@ -64,8 +74,14 @@ void RBezierCurve::RegenMesh()
     float t = step;
     glm::vec3 currentPoint = GetCurvePoint(0.0f);
     glm::vec3 currentNormal = GetCurveNormal(0.0f);
-    while (t <= 1.0f)
+    bool breakLoop = false;
+    while (true)
     {
+        if (t > 1.0f) 
+        {
+            t == 1.0f;
+            breakLoop = true;
+        }
         glm::vec3 nextPosition = GetCurvePoint(t);
         glm::vec3 nextNormal = GetCurveNormal(t);
 
@@ -87,6 +103,10 @@ void RBezierCurve::RegenMesh()
         currentPoint = nextPosition;
         currentNormal = nextNormal;
         t += step;
+        if (breakLoop)
+        {
+            break;
+        }
     }
     fIndexCount = fIndices.size();
     UpdateBuffers();
