@@ -10,6 +10,7 @@ namespace Renderer {
         glm::vec3 fControll1;
         glm::vec3 fControll2;
         float     fThickness;
+        int       fSteps;
     public:
         RBezierCurve();
 
@@ -23,6 +24,8 @@ namespace Renderer {
         const glm::vec3& GetControll1() const;
         void SetThickness(float thickness);
         float GetThickness() const;
+        void SetSteps(int steps);
+        int GetSteps() const;
     private:
         void RegenMesh();
 

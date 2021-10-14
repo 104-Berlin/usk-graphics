@@ -3,7 +3,7 @@
 using namespace Renderer;
 
 RBezierCurve::RBezierCurve() 
-    : RMesh(), fStartPos(100.0f, 100.0f, 0.0f), fEndPos(200.0f, 100.0f, 0.0f), fControll1(100.0f, 50.0f, 0.0f), fControll2(200.0f, 50.0f, 0.0f), fThickness(3.0f)
+    : RMesh(), fStartPos(100.0f, 100.0f, 0.0f), fEndPos(200.0f, 100.0f, 0.0f), fControll1(100.0f, 50.0f, 0.0f), fControll2(200.0f, 50.0f, 0.0f), fThickness(3.0f), fSteps(10.0f)
 {
     RegenMesh();
 }
@@ -62,6 +62,16 @@ float RBezierCurve::GetThickness() const
     return fThickness;
 }
 
+void RBezierCurve::SetSteps(int steps) 
+{
+    fSteps = steps;
+}
+
+int RBezierCurve::GetSteps() const
+{
+    return fSteps;
+}
+
 void RBezierCurve::RegenMesh() 
 {
     fVertices.clear();
@@ -70,7 +80,7 @@ void RBezierCurve::RegenMesh()
     unsigned int indexCounter = 0;
 
     float halfWidth = fThickness / 2.0f;
-    float step = 0.1f;
+    float step = 1.0f / (float)fSteps;
     float t = step;
     glm::vec3 currentPoint = GetCurvePoint(0.0f);
     glm::vec3 currentNormal = GetCurveNormal(0.0f);
@@ -79,7 +89,7 @@ void RBezierCurve::RegenMesh()
     {
         if (t > 1.0f) 
         {
-            t == 1.0f;
+            t = 1.0f;
             breakLoop = true;
         }
         glm::vec3 nextPosition = GetCurvePoint(t);
