@@ -32,7 +32,8 @@ add_library(ImGui STATIC    deps/imgui/imgui.cpp
                             deps/imgui/imgui_draw.cpp
                             deps/imgui/imgui_widgets.cpp
                             deps/imgui/imgui_tables.cpp
-                            deps/imguizmo/ImGuizmo.cpp)
+                            deps/imguizmo/ImGuizmo.cpp
+                            deps/imguizmo/ImCurveEdit.cpp)
 
                             
 target_include_directories(ImGui PUBLIC deps/imgui
