@@ -10,6 +10,7 @@ RBezierCurve::RBezierCurve()
 
 void RBezierCurve::SetStartPos(const glm::vec3& pos) 
 {
+    if (fStartPos == pos) { return; }
     fStartPos = pos;
     RegenMesh();
 }
@@ -21,6 +22,7 @@ const glm::vec3& RBezierCurve::GetStartPos() const
 
 void RBezierCurve::SetEndPos(const glm::vec3& pos) 
 {
+    if (fEndPos == pos) { return; }
     fEndPos = pos;
     RegenMesh();
 }
@@ -32,29 +34,33 @@ const glm::vec3& RBezierCurve::GetEndPos() const
 
 void RBezierCurve::SetControll1(const glm::vec3& pos) 
 {
+    if (fControll1 == pos) { return; }
     fControll1 = pos;
     RegenMesh();
 }
 
-const glm::vec3& RBezierCurve::GetControll2() const
+const glm::vec3& RBezierCurve::GetControll1() const
 {
     return fControll1;
 }
 
 void RBezierCurve::SetControll2(const glm::vec3& pos) 
 {
+    if (fControll2 == pos) { return; }
     fControll2 = pos;
     RegenMesh();
 }
 
-const glm::vec3& RBezierCurve::GetControll1() const
+const glm::vec3& RBezierCurve::GetControll2() const
 {
     return fControll2;
 }
 
 void RBezierCurve::SetThickness(float thickness) 
 {
+    if (fThickness == thickness) { return; }
     fThickness = thickness;
+    RegenMesh();
 }
 
 float RBezierCurve::GetThickness() const
@@ -64,7 +70,9 @@ float RBezierCurve::GetThickness() const
 
 void RBezierCurve::SetSteps(int steps) 
 {
+    if (fSteps == steps) { return; }
     fSteps = steps;
+    RegenMesh();
 }
 
 int RBezierCurve::GetSteps() const
