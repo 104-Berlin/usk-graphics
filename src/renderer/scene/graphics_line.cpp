@@ -25,10 +25,20 @@ void RLine::SetStart(const glm::vec3& point)
     RegenVertices();
 }
 
+const glm::vec3& RLine::GetStart() const
+{
+    return fStart;
+}
+
 void RLine::SetEnd(const glm::vec3& point) 
 {
     fEnd = point;
     RegenVertices();
+}
+
+const glm::vec3& RLine::GetEnd() const
+{
+    return fEnd;
 }
 
 void RLine::RegenVertices() 

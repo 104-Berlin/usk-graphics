@@ -16,7 +16,9 @@ namespace Renderer {
         float GetThickness() const;
 
         void SetStart(const glm::vec3& point);
+        const glm::vec3& GetStart() const;
         void SetEnd(const glm::vec3& point);
+        const glm::vec3& GetEnd() const;
     private:
         void RegenVertices();
     };
