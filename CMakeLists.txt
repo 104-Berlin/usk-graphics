@@ -40,12 +40,9 @@ target_include_directories(ImGui PUBLIC deps/imgui
                                         deps/imguizmo)
                             
 
-add_subdirectory(deps/glm)
 add_subdirectory(src/interface)
 
 target_include_directories(GInterface INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/deps/glm)
-
-target_link_libraries(GInterface INTERFACE glm)
 
 add_subdirectory(src/renderer)
 add_subdirectory(src/rendercommand)
@@ -61,6 +58,7 @@ target_link_libraries(GRenderer GPlatformWrapper)
 target_link_libraries(GPlatformWrapper GOpenGL)
 target_link_libraries(GPlatformWrapper GGLFW)
 target_link_libraries(GPlatformWrapper ImGui)
+
 
 
 
