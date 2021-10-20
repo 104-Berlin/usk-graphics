@@ -91,8 +91,8 @@ namespace Renderer {
          */
         const glm::vec3& GetPosition() const;
 
-        glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight);
-        glm::mat4 GetViewMatrix();
+        glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const;
+        glm::mat4 GetViewMatrix() const;
     };
 
 }

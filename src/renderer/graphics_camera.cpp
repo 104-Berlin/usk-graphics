@@ -57,7 +57,7 @@ const glm::vec3& RCamera::GetPosition() const
     return fPosition;
 }
 
-glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) 
+glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const
 {
     if (screenWidth == 0 || screenHeight == 0) { return glm::mat4(); }
     switch (fCameraMode)
@@ -68,7 +68,7 @@ glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int sc
     return glm::mat4();
 }
 
-glm::mat4 RCamera::GetViewMatrix() 
+glm::mat4 RCamera::GetViewMatrix() const
 {
     return glm::lookAt(fPosition, fPosition + GetForward(), GetUp());
 }
