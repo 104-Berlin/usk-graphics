@@ -3,7 +3,7 @@
 using namespace Renderer;
 
 RCamera::RCamera(ECameraMode cameraMode, const glm::vec3& position)
-    : fCameraMode(cameraMode), fPosition(position), fPitch(0.0f), fYaw(0.0f), fRoll(0.0f)
+    : fCameraMode(cameraMode), fPosition(position), fPitch(0.0f), fYaw(0.0f), fRoll(0.0f), fZoom(1.0f)
 {
 }
 
@@ -57,12 +57,22 @@ const glm::vec3& RCamera::GetPosition() const
     return fPosition;
 }
 
+void RCamera::SetZoom(float zoom) 
+{
+    fZoom = zoom;
+}
+
+float RCamera::GetZoom() const
+{
+    return fZoom;
+}
+
 glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const
 {
     if (screenWidth == 0 || screenHeight == 0) { return glm::mat4(); }
     switch (fCameraMode)
     {
-    case ECameraMode::ORTHOGRAPHIC: return glm::ortho(0.0f, -(float)screenWidth, (float)screenHeight, 0.0f);
+    case ECameraMode::ORTHOGRAPHIC: return glm::ortho(0.0f, -(((float)screenWidth) * fZoom), (((float)screenHeight) * fZoom), 0.0f);
     case ECameraMode::PERSPECTIVE: return glm::perspective(90.0f, (float)screenWidth/(float)screenHeight, 0.001f, 100000.0f);
     }
     return glm::mat4();
@@ -71,4 +81,9 @@ glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int sc
 glm::mat4 RCamera::GetViewMatrix() const
 {
     return glm::lookAt(fPosition, fPosition + GetForward(), GetUp());
+}
+
+ECameraMode RCamera::GetMode() const
+{
+    return fCameraMode;
 }

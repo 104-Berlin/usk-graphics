@@ -39,6 +39,12 @@ namespace Renderer {
          * The z-rotation of the camera
          */
         float fRoll;
+
+        /**
+         * The zoom of the camera. Only used for ORTHOGRAPHIC Cameras
+         * When using orthographic camera you should leave the the forward motion of the camera at 0
+         */
+        float fZoom;
     public:
         RCamera(ECameraMode cameraMode, const glm::vec3& position = glm::vec3());
 
@@ -91,8 +97,17 @@ namespace Renderer {
          */
         const glm::vec3& GetPosition() const;
 
+        /**
+         * @brief Set the zoom of the Camera. Only applied for ORTHOGRAPHIC Camera
+         * @param zoom
+         */
+        void SetZoom(float zoom);
+        float GetZoom() const;
+
         glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const;
         glm::mat4 GetViewMatrix() const;
+
+        ECameraMode GetMode() const;
     };
 
 }
