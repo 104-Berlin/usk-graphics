@@ -10,3 +10,12 @@
 [submodule "deps/imguizmo"]
 	path = deps/imguizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "src/platform/cross-window/cross-window"]
+	path = src/platform/cross-window/cross-window
+	url = https://github.com/alaingalvan/CrossWindow.git
+[submodule "src/platform/wrapper/cw-graphics"]
+	path = src/platform/wrapper/cw-graphics
+	url = https://github.com/alaingalvan/CrossWindow-Graphics.git
+[submodule "src/platform/wrapper/gl-api"]
+	path = src/platform/wrapper/gl-api
+	url = https://github.com/KhronosGroup/OpenGL-Registry.git

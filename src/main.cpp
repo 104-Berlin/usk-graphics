@@ -16,6 +16,7 @@ const std::vector<unsigned int> indices = {
     0, 1, 2
 };
 
+static GContext* globContext = nullptr;
 static Renderer::RRenderer3D* renderer = nullptr;
 static GFrameBuffer* frameBuffer = nullptr;
 static RMesh* mesh = new RMesh();
@@ -24,6 +25,7 @@ static RScene* scene = new RScene();
 
 void Init(GContext* context)
 {
+    globContext = context;
     frameBuffer = Wrapper::CreateFrameBuffer(1270, 720, Graphics::GFrameBufferFormat::RGBA16F);
     renderer = new RRenderer3D(context, frameBuffer);
 
@@ -44,7 +46,7 @@ void Render();
 void RenderImGui();
 
 
-int main()
+void xmain(int argc, const char** argv)
 {
     Wrapper::RunApplicationLoop(&Init, &Render, &RenderImGui, &CleanUp, &Wrapper::SetImGuiContext);
 }
@@ -52,7 +54,9 @@ int main()
 
 void Render() 
 {
-    renderer->Render(scene, &camera);
+    globContext->Clear(1.0f, 0.0f, 0.0f, GCLEAROPTION_COLOR_BUFFER | GCLEAROPTION_DEPTH_BUFFER);
+
+    //renderer->Render(scene, &camera);
 }
 
 void RenderImGui()

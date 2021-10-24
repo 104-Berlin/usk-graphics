@@ -9,6 +9,10 @@
 #include "graphics_glfw.h"
 #include "backends/imgui_impl_glfw.h"
 #endif
+#ifdef G_USE_CROSS_WINDOW
+#include "graphics_cross_window.h"
+#endif
+#include "CrossWindow/Graphics.h"
 
 using namespace Graphics;
 
@@ -141,29 +145,32 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
 {
     GWindow* window = nullptr;
     mainContext = nullptr;
+
 #ifdef G_USE_GLFW
     window = new GLFW::GLFWWindow();
 #endif
-#ifdef G_USE_OPENGL
-    mainContext = new GL::GLContext();
-#endif    
-    if (!window)
-    {
-        printf("Could not create window. Please select window API");
-        return;
-    }
-    if (!mainContext)
-    {
-        printf("Could not create context. Please select rendering API");
-        return;
-    }
-
+#ifdef G_USE_CROSS_WINDOW
+    window = new CW::CWWindow();
+#endif
     window->Create("My Test window", 1270, 720);
-    window->CreateContext(mainContext);
+
+#ifdef G_USE_OPENGL
+#ifdef G_USE_CROSS_WINDOW
+    mainContext = new GL::GLContext();
+    xgfx::OpenGLDesc glDesc;
+    xgfx::OpenGLState glState = xgfx::createContext(((CW::CWWindow*)window)->GetCWWindow(), glDesc);
+    xgfx::setContext(glState);
+    mainContext->Init(NULL);
+#endif 
+#endif   
 
 
-    default_3d_shader = CreateShader();
-    default_3d_shader->Compile(default_3d_vertex_shader, default_3d_fragment_shader);
+    
+
+
+
+    //default_3d_shader = CreateShader();
+    //default_3d_shader->Compile(default_3d_vertex_shader, default_3d_fragment_shader);
 
     
 
@@ -188,8 +195,8 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
     // Setup Platform/Renderer backends
 #ifdef G_USE_GLFW 
 #ifdef G_USE_OPENGL
-    ImGui_ImplGlfw_InitForOpenGL(((GLFW::GLFWWindow*)window)->GetGlfwWindow(), true);
-    ImGui_ImplOpenGL3_Init();
+    //ImGui_ImplGlfw_InitForOpenGL(((GLFW::GLFWWindow*)window)->GetGlfwWindow(), true);
+    //ImGui_ImplOpenGL3_Init();
 #endif
 #endif
 
@@ -204,12 +211,13 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
     }
 
 #ifdef G_USE_OPENGL
-    ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
+    //ImGui_ImplOpenGL3_CreateFontsTexture(); // Need this to work with my renderer
 #endif
 
     while (window->IsOpen())
     {
         window->PollEvents();
+
 
         if (RenderCallback)
         {
@@ -220,7 +228,7 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
         ImGui_ImplGlfw_NewFrame();
 #endif
 
-        ImGui::NewFrame();
+        /*ImGui::NewFrame();
         ImGuizmo::BeginFrame();
         
         static bool p_open;
@@ -266,7 +274,7 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
 
         ImGui::End();
 
-        ImGui::Render();
+        ImGui::Render();*/
 
 #ifdef G_USE_GLFW 
 #ifdef G_USE_OPENGL
@@ -296,12 +304,12 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
 
 
         // Swap the renderer
-        Renderer::RRenderCommandQueue::Get().Execute();
-        window->SwapBuffer();
+        //Renderer::RRenderCommandQueue::Get().Execute();
+        xgfx::swapBuffers(glState);
     }     
 
 #ifdef G_USE_OPENGL
-    ImGui_ImplOpenGL3_Shutdown();
+    //ImGui_ImplOpenGL3_Shutdown();
 #endif  
 #ifdef G_USE_GLFW
     ImGui_ImplGlfw_Shutdown();
