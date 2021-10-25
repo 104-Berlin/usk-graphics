@@ -5,8 +5,6 @@
 #include "ImGuizmo.h"
 #include "ImCurveEdit.h"
 
-#include "graphics_wrapper_imgui.h"
-
 #ifdef G_USE_GLFW
 #include "graphics_glfw_keybinds.h"
 #endif

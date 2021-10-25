@@ -10,7 +10,6 @@ set(XGFX_API OPENGL)
 add_subdirectory(cw-graphics)
 
 add_library(GPlatformWrapper SHARED graphics_wrapper.cpp
-                                    graphics_wrapper_imgui.cpp
                                     ${PLATFORM_SRC})
 
 target_include_directories(GPlatformWrapper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
