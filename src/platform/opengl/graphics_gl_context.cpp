@@ -5,15 +5,8 @@ using namespace GL;
 
 void GLContext::Init(void* initData) 
 {
-    int gladStatus = 0;
-    if (initData)
-    {
-        gladStatus = gladLoadGLLoader((GLADloadproc)initData);
-    }
-    else
-    {
-        gladStatus = gladLoadGL();
-    }
+    if (!initData) { printf("Please provide the GLADloadproc to the OpenGL context init"); return; }
+    int gladStatus = gladLoadGLLoader((GLADloadproc)initData);
     printf("Glad Init Status: %d\n", gladStatus);
     printf("%s\n", glGetString(GL_VERSION));
     EnableDepthTest(true);

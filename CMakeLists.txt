@@ -48,7 +48,7 @@ add_subdirectory(src/renderer)
 add_subdirectory(src/rendercommand)
 
 add_subdirectory(src/platform/opengl)
-add_subdirectory(src/platform/cross-window)
+add_subdirectory(src/platform/glfw)
 
 add_subdirectory(src/platform/wrapper)
 target_link_libraries(GRenderer GInterface)
@@ -56,7 +56,7 @@ target_link_libraries(GRenderer GRenderCommand)
 target_link_libraries(GRenderer GPlatformWrapper)
 
 target_link_libraries(GPlatformWrapper GOpenGL)
-target_link_libraries(GPlatformWrapper GCrossWindow)
+target_link_libraries(GPlatformWrapper GGLFW)
 target_link_libraries(GPlatformWrapper ImGui)
 
 
@@ -64,13 +64,11 @@ target_link_libraries(GPlatformWrapper ImGui)
 
 target_link_libraries(GOpenGL GInterface)
 target_link_libraries(GOpenGL GRenderCommand)
-target_link_libraries(GCrossWindow GInterface)
+target_link_libraries(GGLFW GInterface)
 
 
 
-
-
-xwin_add_executable(Main     src/main.cpp)
+add_executable(Main     src/main.cpp)
 
 target_link_libraries(Main GPlatformWrapper)
 target_link_libraries(Main GRenderer)
