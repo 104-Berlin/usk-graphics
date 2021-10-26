@@ -2,6 +2,7 @@
 
 #include "graphics_interface.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "ImGuizmo.h"
 #include "ImCurveEdit.h"
 
