@@ -3,6 +3,8 @@
 #include <queue>
 #include <vector>
 
+#include "../../deps/nanosvg/src/nanosvg.h"
+
 #include "graphics_interface.h"
 #include "graphics_render_command.h"
 #include "graphics_wrapper.h"

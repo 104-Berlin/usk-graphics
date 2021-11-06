@@ -10,3 +10,6 @@
 [submodule "deps/imguizmo"]
 	path = deps/imguizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "deps/nanosvg"]
+	path = deps/nanosvg
+	url = https://github.com/memononen/nanosvg.git
