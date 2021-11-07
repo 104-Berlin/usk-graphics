@@ -38,6 +38,7 @@ namespace Renderer {
         void Add(RObject* object);
         void Attach(RObject* object);
 
+        void Clear();
         const std::vector<RObject*>& GetChildren() const;
 
         RObject* GetParent() const;

@@ -115,6 +115,15 @@ void RObject::Attach(RObject* object)
     SetModelMatrix(modelMatrix);
 }
 
+void RObject::Clear() 
+{
+    for (auto child : fChildren)
+    {
+        delete child;
+    }
+    fChildren.clear();
+}
+
 const std::vector<RObject*>& RObject::GetChildren() const
 {
     return fChildren;
