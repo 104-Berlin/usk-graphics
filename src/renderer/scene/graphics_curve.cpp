@@ -88,7 +88,7 @@ void RBezierCurve::RegenMesh()
     unsigned int indexCounter = 0;
 
     float halfWidth = fThickness / 2.0f;
-    float step = 1.0f / (float)fSteps;
+    float step = 1.0f / (float)abs(fSteps);
     float t = step;
     glm::vec3 currentPoint = GetCurvePoint(0.0f);
     glm::vec3 currentNormal = GetCurveNormal(0.0f);
