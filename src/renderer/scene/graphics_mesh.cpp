@@ -42,6 +42,10 @@ size_t RMesh::GetIndexCount() const
 
 void RMesh::OnRender(Graphics::GContext* context) 
 {
+    if (!fVertexArray)
+    {
+        return;
+    }
     fVertexArray->Bind();
 
     context->DrawElements(fVertexArray->GetIndexBuffer()->GetIndexCount(), Graphics::GIndexType::UNSIGNED_INT, Graphics::GDrawMode::TRIANGLES);
