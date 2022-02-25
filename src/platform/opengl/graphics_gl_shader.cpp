@@ -167,6 +167,9 @@ int GLShader::GetUniformLocation(const char* name)
 {   
     int result = glGetUniformLocation(fRenderId, name);
     if (result == -1)
+	{
         printf("Could not find Uniform %s\n", name);
+		exit(1);
+	}
     return result;
 }

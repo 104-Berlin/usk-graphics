@@ -3,6 +3,14 @@
 #include <queue>
 #include <vector>
 
+
+
+#ifdef R_PI
+#undef R_PI
+#endif
+
+#define R_PI 3.14159f
+
 #include "graphics_interface.h"
 #include "graphics_render_command.h"
 #include "graphics_wrapper.h"

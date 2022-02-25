@@ -66,7 +66,10 @@ void RMesh::UpdateBuffers()
     Graphics::GVertexBuffer* vertexBuffer = Graphics::Wrapper::CreateVertexBuffer();
     vertexBuffer->SetData((unsigned char*) fVertices.data(), fVertices.size() * sizeof(Vertex));
 
-    vertexBuffer->SetLayout({Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Position")});
+    vertexBuffer->SetLayout({
+        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Position"),
+        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Normal")
+    });
 
     Graphics::GIndexBuffer* indexBuffer = Graphics::Wrapper::CreateIndexBuffer();
     indexBuffer->SetData((unsigned char*)fIndices.data(), fIndices.size() * sizeof(unsigned int), sizeof(unsigned int));

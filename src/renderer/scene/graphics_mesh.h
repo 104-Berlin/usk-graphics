@@ -8,6 +8,7 @@ namespace Renderer {
         struct Vertex
         {
             glm::vec3 Position;
+            glm::vec3 Normal;
         };
     protected:
         std::vector<Vertex>         fVertices;

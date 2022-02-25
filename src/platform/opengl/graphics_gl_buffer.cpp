@@ -238,14 +238,19 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
     glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
     glCall(glBindTexture(GL_TEXTURE_2D, 0));
     
-    
-    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fColorAttachment, 0));
-
     glCall(glGenTextures(1, &fDepthAttachment));
     glCall(glBindTexture(GL_TEXTURE_2D, fDepthAttachment));
-    glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, fWidth, fHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL));
+    glCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    glCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+	glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, fWidth, fHeight, 0, GL_DEPTH_COMPONENT, GL_BYTE, nullptr));
+    
 
-    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, fDepthAttachment, 0));
+
+    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fColorAttachment, 0));
+    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fDepthAttachment, 0));
+
 
     GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;
     if ((frameBufferResult = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
@@ -253,7 +258,7 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
         printf("Depth FrameBuffer is incomplete! %d\n", frameBufferResult);
     }
         
-
+    glCall(glBindTexture(GL_TEXTURE_2D, 0));
     glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 

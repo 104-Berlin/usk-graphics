@@ -19,6 +19,13 @@ namespace Graphics {
         TRIANGLES,
     };
 
+    enum class GCullMode
+    {
+        NONE,
+        FRONT,
+        BACK
+    };
+
     class GContext 
     {
     public:
@@ -31,6 +38,7 @@ namespace Graphics {
         virtual void DrawArrays(size_t start, size_t count, Graphics::GDrawMode drawMode) = 0;
 
         virtual void EnableDepthTest(bool enable) = 0;
+        virtual void SetFaceCullingMode(GCullMode mode) = 0;
 
 
         static GContext* Get();

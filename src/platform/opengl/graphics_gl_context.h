@@ -37,6 +37,8 @@ namespace GL {
 
         virtual void Clear(float r = 0.0f, float g = 0.0f, float b = 0.0f, unsigned char GCLEAROPTIONS = GCLEAROPTION_COLOR_BUFFER | GCLEAROPTION_DEPTH_BUFFER) override;
         virtual void EnableDepthTest(bool enable) override;
+        virtual void SetFaceCullingMode(Graphics::GCullMode mode) override;
+
 
         virtual void DrawElements(size_t count, Graphics::GIndexType indexType, Graphics::GDrawMode drawMode) override;
         virtual void DrawArrays(size_t start, size_t count, Graphics::GDrawMode drawMode) override;

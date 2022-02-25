@@ -3,7 +3,7 @@
 using namespace Renderer;
 
 RCamera::RCamera(ECameraMode cameraMode, const glm::vec3& position)
-    : fCameraMode(cameraMode), fPosition(position), fPitch(0.0f), fYaw(0.0f), fRoll(0.0f), fZoom(1.0f)
+    : fCameraMode(cameraMode), fPosition(position), fPitch(0.0f), fMaxPitch(100000.0f), fMinPitch(-100000.0f), fYaw(0.0f), fMaxYaw(100000.0f), fMinYaw(-100000.0f), fRoll(0.0f), fMaxRoll(100000.0f), fMinRoll(-100000.0f), fZoom(1.0f)
 {
 }
 
@@ -25,11 +25,17 @@ void RCamera::MoveUp(float amount)
 void RCamera::TurnRight(float angle) 
 {
     fYaw += angle;
+    fYaw = std::max(fYaw, fMinYaw);
+    fYaw = std::min(fYaw, fMaxYaw);
+    fYaw = std::fmod(fYaw, 2 * R_PI);
 }
 
 void RCamera::TurnUp(float angle) 
 {
     fPitch += angle;
+    fPitch = std::max(fPitch, fMinPitch);
+    fPitch = std::min(fPitch, fMaxPitch);
+    fPitch = std::fmodf(fPitch, 2.0f * R_PI);
 }
 
 glm::vec3 RCamera::GetForward() const
@@ -57,6 +63,11 @@ const glm::vec3& RCamera::GetPosition() const
     return fPosition;
 }
 
+glm::vec3 RCamera::GetRotationEuler() const
+{
+    return {fPitch, fYaw, fRoll};
+}
+
 void RCamera::SetZoom(float zoom) 
 {
     fZoom = zoom;
@@ -66,6 +77,37 @@ float RCamera::GetZoom() const
 {
     return fZoom;
 }
+
+void RCamera::SetMaxPitch(float maxPitch) 
+{
+    fMaxPitch = maxPitch;
+}
+
+void RCamera::SetMinPitch(float minPitch) 
+{
+    fMinPitch = minPitch;
+}
+
+void RCamera::SetMaxYaw(float maxYaw) 
+{
+    fMaxYaw = maxYaw;
+}
+
+void RCamera::SetMinYaw(float minYaw) 
+{
+    fMinYaw = minYaw;
+}
+
+void RCamera::SetMaxRoll(float maxRoll) 
+{
+    fMaxRoll = maxRoll;
+}
+
+void RCamera::SetMinRoll(float minRoll) 
+{
+    fMinRoll = minRoll;
+}
+
 
 glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const
 {

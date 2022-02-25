@@ -31,14 +31,47 @@ namespace Renderer {
         float fPitch;
 
         /**
+         * Max Pitch
+         */
+        float fMaxPitch;
+
+        /**
+         * @brief Min Pitch
+         */
+        float fMinPitch;
+
+
+        /**
          * The y-rotation of the camera
          */
         float fYaw;
 
         /**
+         * @brief Max Yaw
+         * 
+         */
+        float fMaxYaw;
+
+        /**
+         * @brief Min Yaw
+         * 
+         */
+        float fMinYaw;
+
+        /**
          * The z-rotation of the camera
          */
         float fRoll;
+
+        /**
+         * @brief Max Roll
+         */
+        float fMaxRoll;
+
+        /**
+         * @brief Min Roll
+         */
+        float fMinRoll;
 
         /**
          * The zoom of the camera. Only used for ORTHOGRAPHIC Cameras
@@ -98,11 +131,60 @@ namespace Renderer {
         const glm::vec3& GetPosition() const;
 
         /**
+         * @brief Get the Rotation in euler angles.
+         * 
+         * @return glm::vec3 
+         */
+        glm::vec3 GetRotationEuler() const;
+
+        /**
          * @brief Set the zoom of the Camera. Only applied for ORTHOGRAPHIC Camera
          * @param zoom
          */
         void SetZoom(float zoom);
         float GetZoom() const;
+
+        /**
+         * @brief Set the max pitch of the camera.
+         * 
+         * @param maxPitch 
+         */
+        void SetMaxPitch(float maxPitch);
+
+        /**
+         * @brief Set the min pitch of the camera.
+         * 
+         * @param minPitch 
+         */
+        void SetMinPitch(float minPitch);
+
+        /**
+         * @brief Set the max yaw of the camera.
+         * 
+         * @param maxYaw 
+         */
+        void SetMaxYaw(float maxYaw);
+
+        /**
+         * @brief Set the min yaw of the camera.
+         * 
+         * @param minYaw 
+         */
+        void SetMinYaw(float minYaw);
+
+        /**
+         * @brief Set the max roll of the camera.
+         * 
+         * @param maxRoll 
+         */
+        void SetMaxRoll(float maxRoll);
+
+        /**
+         * @brief Set the min roll of the camera.
+         * 
+         * @param minRoll 
+         */
+        void SetMinRoll(float minRoll);
 
         glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const;
         glm::mat4 GetViewMatrix() const;
