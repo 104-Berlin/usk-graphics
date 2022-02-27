@@ -36,7 +36,7 @@ const vec3 light_direction = vec3(0.0, 0.0, -1.0);
 void main()
 {
     float diffuse = max(dot(normalize(currentNormal), normalize(light_direction)), 0.2);
-    fColor = vec4((normalize(currentNormal) + vec3(1.0, 1.0, 1.0)) / 2, 1);
+    fColor = vec4((vec3(1.0, 1.0, 1.0) * diffuse), 1);
 }
 )";
 
@@ -48,7 +48,7 @@ RRenderer3D::RRenderer3D(Graphics::GContext* context, Graphics::GFrameBuffer* fr
     : RRendererBase(context), fFrameBuffer(frameBuffer), fViewProjectionMatrix(), fDefaultShader(Graphics::Wrapper::CreateShader())
 {
     assert(context);
-    assert(frameBuffer);
+    assert(fFrameBuffer);
 
     fDefaultShader->Compile(default_3d_vertex_shader, default_3d_fragment_shader);
 }
@@ -72,8 +72,9 @@ void RRenderer3D::Render(RScene* scene, RCamera* camera)
         return;
     }
 
-    fContext->SetFaceCullingMode(Graphics::GCullMode::NONE);
-    fFrameBuffer->Bind();
+    fContext->SetFaceCullingMode(Graphics::GCullMode::FRONT);
+    //fFrameBuffer->Bind();
+    //fFrameBuffer->Unbind();
     fContext->EnableDepthTest(true);
     fContext->Clear();
     fDefaultShader->Bind();
@@ -87,5 +88,5 @@ void RRenderer3D::Render(RScene* scene, RCamera* camera)
     });
 
     fDefaultShader->Unbind();
-    fFrameBuffer->Unbind();
+    //fFrameBuffer->Unbind();
 }

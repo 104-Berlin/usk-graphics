@@ -234,7 +234,7 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
         glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fWidth, fHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
     }
 
-    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    /*glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
     glCall(glBindTexture(GL_TEXTURE_2D, 0));
     
@@ -244,12 +244,12 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
     glCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
 	glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-    glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, fWidth, fHeight, 0, GL_DEPTH_COMPONENT, GL_BYTE, nullptr));
+    glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, fWidth, fHeight, 0, GL_DEPTH_COMPONENT, GL_BYTE, nullptr));*/
     
 
 
     glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fColorAttachment, 0));
-    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fDepthAttachment, 0));
+    //glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fDepthAttachment, 0));
 
 
     GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;

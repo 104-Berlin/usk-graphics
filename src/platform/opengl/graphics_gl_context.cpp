@@ -10,6 +10,10 @@ void GLContext::Init(void* initData)
     printf("Glad Init Status: %d\n", gladStatus);
     printf("%s\n", glGetString(GL_VERSION));
     EnableDepthTest(true);
+    int bits;
+    glGetIntegerv(GL_DEPTH_BITS, &bits);
+    printf("Depth Bits: %d", bits);
+
 }
 
 void GLContext::Clear(float r, float g, float b, unsigned char GCLEAROPTIONS) 
@@ -20,7 +24,7 @@ void GLContext::Clear(float r, float g, float b, unsigned char GCLEAROPTIONS)
     clearOption |= GCLEAROPTIONS & GCLEAROPTION_STENCIL_BUFFER ? GL_STENCIL_BUFFER_BIT : 0;
     clearOption |= GCLEAROPTIONS & GCLEAROPTION_ACCUM_BUFFER ? GL_ACCUM_BUFFER_BIT : 0;
     glCall(glClearColor(r, g, b, 1));
-    glCall(glClearDepth(0.0));
+    //glCall(glClearDepth(1.0));
     glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
@@ -29,10 +33,11 @@ void GLContext::EnableDepthTest(bool enable)
     glCall(glDisable(GL_SCISSOR_TEST));
     if (fDepthTestEnabled)
     {
-        glCall(glEnable(GL_DEPTH_TEST));
-        glCall(glDisable(GL_STENCIL_TEST));
         glCall(glDepthFunc(GL_LESS));
         glCall(glDepthMask(GL_TRUE));
+        glCall(glEnable(GL_DEPTH_TEST));
+        glCall(glDisable(GL_BLEND));
+        //glCall(glDisable(GL_STENCIL_TEST));
     }
     else
     {
