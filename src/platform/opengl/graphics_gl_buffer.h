@@ -84,6 +84,7 @@ namespace GL {
         GLuint fRenderId;
         GLuint fColorAttachment;
         GLuint fDepthAttachment;
+        GLuint fNormalAttachment;
 
         GLuint fWidth;
         GLuint fHeight;
@@ -102,6 +103,7 @@ namespace GL {
 
 		virtual unsigned int GetColorAttachment() const;
 		virtual unsigned int GetDepthAttachment() const;
+        virtual unsigned int GetNormalAttachment() const;
     };
 
 }

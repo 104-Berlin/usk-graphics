@@ -219,6 +219,7 @@ namespace Graphics {
 
 		virtual unsigned int GetColorAttachment() const = 0;
 		virtual unsigned int GetDepthAttachment() const = 0;
+		virtual unsigned int GetNormalAttachment() const = 0;
 	};
 
 }

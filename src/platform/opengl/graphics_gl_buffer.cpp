@@ -173,7 +173,7 @@ void GLVertexArray::SetIndexBuffer(Graphics::GIndexBuffer* indexBuffer)
 }
 
 GLFrameBuffer::GLFrameBuffer(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format) 
-    : fWidth(0), fHeight(0), fFormat(Graphics::GFrameBufferFormat::None), fRenderId(0), fColorAttachment(0), fDepthAttachment(0)
+    : fWidth(0), fHeight(0), fFormat(Graphics::GFrameBufferFormat::None), fRenderId(0), fColorAttachment(0), fDepthAttachment(0), fNormalAttachment(0)
 {
     Resize(width, height, format);
 }
@@ -190,6 +190,7 @@ GLFrameBuffer::~GLFrameBuffer()
     glCall(glDeleteFramebuffers(1, &fRenderId));
     glCall(glDeleteTextures(1, &fColorAttachment));
     glCall(glDeleteTextures(1, &fDepthAttachment));
+    glCall(glDeleteTextures(1, &fNormalAttachment));
 }
 
 void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GFrameBufferFormat format) 
@@ -216,12 +217,17 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
         glCall(glDeleteTextures(1, &fColorAttachment));
     }
 
+    if (fNormalAttachment)
+    {
+        glCall(glDeleteTextures(1, &fNormalAttachment));
+    }
+
 
     glCall(glGenFramebuffers(1, &fRenderId));
     glCall(glBindFramebuffer(GL_FRAMEBUFFER, fRenderId));
 
     
-
+    // COLOR ATTACHMENT
     glCall(glGenTextures(1, &fColorAttachment));
     glCall(glBindTexture(GL_TEXTURE_2D, fColorAttachment));
 
@@ -238,6 +244,9 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
     glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
     glCall(glBindTexture(GL_TEXTURE_2D, 0));
     
+
+    // DEPTH ATTACHMENT
+
     glCall(glGenTextures(1, &fDepthAttachment));
     glCall(glBindTexture(GL_TEXTURE_2D, fDepthAttachment));
     glCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -248,9 +257,22 @@ void GLFrameBuffer::Resize(unsigned int width, unsigned int height, Graphics::GF
     
 
 
+    /// NORMAL ATTACHMENT
+    glGenTextures(1, &fNormalAttachment);
+    glBindTexture(GL_TEXTURE_2D, fNormalAttachment);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fWidth, fHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
     glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fColorAttachment, 0));
+    glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, fNormalAttachment, 0));
     glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fDepthAttachment, 0));
 
+
+    GLenum DrawBuffers[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2, DrawBuffers); // "1" is the size of DrawBuffers
 
     GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;
     if ((frameBufferResult = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
@@ -291,4 +313,9 @@ unsigned int GLFrameBuffer::GetColorAttachment() const
 unsigned int GLFrameBuffer::GetDepthAttachment() const
 {
     return fDepthAttachment;
+}
+
+unsigned int GLFrameBuffer::GetNormalAttachment() const
+{
+    return fNormalAttachment;
 }

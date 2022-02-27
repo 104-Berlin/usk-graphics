@@ -29,7 +29,8 @@ const char* default_3d_fragment_shader = R"(
 in vec3 currentPos;
 in vec3 currentNormal;
 
-out vec4 fColor;
+layout (location = 0) out vec4 fColor;
+layout (location = 1) out vec3 fNormal;
 
 const vec3 light_direction = vec3(0.0, 0.0, -1.0);
 
@@ -37,6 +38,7 @@ void main()
 {
     float diffuse = max(dot(normalize(currentNormal), normalize(light_direction)), 0.2);
     fColor = vec4((vec3(1.0, 1.0, 1.0) * diffuse), 1);
+    fNormal = (normalize(currentNormal) + vec3(1.0, 1.0, 1.0)) / 2.0;
 }
 )";
 
