@@ -12,8 +12,6 @@ void GLContext::Init(void* initData)
     EnableDepthTest(true);
     int bits;
     glGetIntegerv(GL_DEPTH_BITS, &bits);
-    printf("Depth Bits: %d", bits);
-
 }
 
 void GLContext::Clear(float r, float g, float b, unsigned char GCLEAROPTIONS) 
