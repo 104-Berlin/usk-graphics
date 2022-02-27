@@ -211,7 +211,11 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
     {
         window->PollEvents();
 
-//#if 1
+        if (RenderCallback)
+        {
+            RenderCallback();
+        }
+        
 #ifdef G_USE_GLFW 
         ImGui_ImplGlfw_NewFrame();
 #endif
@@ -219,11 +223,7 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
         
-        if (RenderCallback)
-        {
-            RenderCallback();
-        }
-        /*static bool p_open;
+        static bool p_open;
 
         static bool opt_fullscreen_persistant = true;
         static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
@@ -257,16 +257,15 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
         {		
             ImGuiID dockspace_id = ImGui::GetID("MyDockspace");		
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);		
-        }*/
-        ImGui::Render(); // Needs to go after
+        }
 
-#if 0
         if (RenderImGui)
         {
             RenderImGui();
         }
+        ImGui::End();
 
-        //ImGui::End();
+        ImGui::Render(); // Needs to go after
 
 #ifdef G_USE_GLFW 
 #ifdef G_USE_OPENGL
@@ -283,8 +282,6 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
 
 #endif
 #endif
-#endif
-
         // Update and Render additional Platform Windows
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
         //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
@@ -292,8 +289,8 @@ void Wrapper::RunApplicationLoop(std::function<void(GContext* context)> OnInit, 
         {
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
-            //ImGui::RenderPlatformWindowsDefault();
-            //glfwMakeContextCurrent(backup_current_context);
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
         }
         // Swap the renderer
         window->SwapBuffer();

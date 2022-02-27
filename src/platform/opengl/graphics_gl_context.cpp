@@ -30,6 +30,7 @@ void GLContext::Clear(float r, float g, float b, unsigned char GCLEAROPTIONS)
 
 void GLContext::EnableDepthTest(bool enable)
 {
+    fDepthTestEnabled = enable;
     glCall(glDisable(GL_SCISSOR_TEST));
     if (fDepthTestEnabled)
     {

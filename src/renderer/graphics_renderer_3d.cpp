@@ -72,9 +72,8 @@ void RRenderer3D::Render(RScene* scene, RCamera* camera)
         return;
     }
 
-    fContext->SetFaceCullingMode(Graphics::GCullMode::FRONT);
-    //fFrameBuffer->Bind();
-    //fFrameBuffer->Unbind();
+    fContext->SetFaceCullingMode(Graphics::GCullMode::BACK);
+    fFrameBuffer->Bind();
     fContext->EnableDepthTest(true);
     fContext->Clear();
     fDefaultShader->Bind();
@@ -88,5 +87,5 @@ void RRenderer3D::Render(RScene* scene, RCamera* camera)
     });
 
     fDefaultShader->Unbind();
-    //fFrameBuffer->Unbind();
+    fFrameBuffer->Unbind();
 }
