@@ -32,7 +32,7 @@ in vec3 currentNormal;
 layout (location = 0) out vec4 fColor;
 layout (location = 1) out vec3 fNormal;
 
-const vec3 light_direction = vec3(0.0, 0.0, -1.0);
+const vec3 light_direction = vec3(0.7, 0.9, 0.8);
 
 void main()
 {
