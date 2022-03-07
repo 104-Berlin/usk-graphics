@@ -198,6 +198,7 @@ namespace Renderer {
         glm::mat4 GetViewMatrix() const;
 
         ECameraMode GetMode() const;
+        void SetMode(ECameraMode mode);
     };
 
 }

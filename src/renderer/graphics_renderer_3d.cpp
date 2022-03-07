@@ -74,7 +74,7 @@ void RRenderer3D::Render(RScene* scene, RCamera* camera)
         return;
     }
 
-    fContext->SetFaceCullingMode(Graphics::GCullMode::BACK);
+    fContext->SetFaceCullingMode(Graphics::GCullMode::NONE);
     fFrameBuffer->Bind();
     fContext->EnableDepthTest(true);
     fContext->Clear();
