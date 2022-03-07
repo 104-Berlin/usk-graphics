@@ -79,6 +79,7 @@ void RRenderer3D::Render(RScene* scene, RCamera* camera)
     fContext->EnableDepthTest(true);
     fContext->Clear();
     fDefaultShader->Bind();
+    
     glm::mat4 viewProjection = camera->GetProjectionMatrix(fFrameBuffer->GetWidth(), fFrameBuffer->GetHeight()) * camera->GetViewMatrix();   
     fDefaultShader->SetUniformMat4("vp_matrix", viewProjection);
 

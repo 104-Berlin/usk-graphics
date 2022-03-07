@@ -186,6 +186,14 @@ namespace Renderer {
          */
         void SetMinRoll(float minRoll);
 
+
+        /**
+         * @brief Look at a target.
+         * 
+         * @param target 
+         */
+        void LookAt(const glm::vec3& target);
+
         glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const;
         glm::mat4 GetViewMatrix() const;
 

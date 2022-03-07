@@ -108,6 +108,16 @@ void RCamera::SetMinRoll(float minRoll)
     fMinRoll = minRoll;
 }
 
+void RCamera::LookAt(const glm::vec3& target)
+{
+    // Rotate the camera to look at the target
+    glm::vec3 direction = target - fPosition;
+    fYaw = atan2f(direction.x, direction.z);
+    fPitch = atan2f(direction.y, sqrtf(direction.x * direction.x + direction.z * direction.z));
+    fRoll = 0.0f;
+}
+
+
 
 glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const
 {
