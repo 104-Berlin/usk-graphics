@@ -118,6 +118,23 @@ void RCamera::LookAt(const glm::vec3& target)
 }
 
 
+float RCamera::GetPitch() const
+{
+    return fPitch;
+}
+
+float RCamera::GetYaw() const
+{
+    return fYaw;
+}
+
+float RCamera::GetRoll() const
+{
+    return fRoll;
+}
+
+
+
 
 glm::mat4 RCamera::GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const
 {

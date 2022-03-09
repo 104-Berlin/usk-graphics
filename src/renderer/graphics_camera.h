@@ -194,6 +194,21 @@ namespace Renderer {
          */
         void LookAt(const glm::vec3& target);
 
+        /**
+         * @return Pitch of the camera
+         */
+        float GetPitch() const;
+
+        /**
+         * @return Yaw of the camera
+         */
+        float GetYaw() const;
+
+        /**
+         * @return Roll of the camera
+         */
+        float GetRoll() const;
+
         glm::mat4 GetProjectionMatrix(unsigned int screenWidth, unsigned int screenHeight) const;
         glm::mat4 GetViewMatrix() const;
 
