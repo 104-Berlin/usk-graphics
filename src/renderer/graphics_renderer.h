@@ -23,6 +23,7 @@
 #include "scene/graphics_texture_object.h"
 #include "scene/graphics_curve.h"
 #include "scene/graphics_line.h"
+#include "scene/graphics_grid.h"
 
 #include "graphics_camera.h"
 
