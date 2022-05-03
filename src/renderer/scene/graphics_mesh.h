@@ -29,4 +29,29 @@ namespace Renderer {
         void UpdateBuffers();
     };
 
+    class RTestMesh : public RObject
+    {
+    public:
+        struct Vertex
+        {
+            glm::vec3 Position;
+            glm::vec3 Normal;
+        };
+    private:
+        std::vector<Vertex>         fVertices;
+
+        Graphics::GVertexArray*     fVertexArray;
+    public:
+        RTestMesh();
+        virtual ~RTestMesh();
+
+        void SetData(const std::vector<Vertex>& vertices);
+
+        virtual void OnRender(Graphics::GContext* context) override;
+    private:
+
+        void UpdateBuffers();
+        Graphics::GVertexArray* GetSingleBuffer(const std::vector<Vertex>& vertices);
+    };
+
 }

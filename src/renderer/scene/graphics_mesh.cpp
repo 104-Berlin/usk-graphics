@@ -77,3 +77,93 @@ void RMesh::UpdateBuffers()
     fVertexArray->AddVertexBuffer(vertexBuffer);
     fVertexArray->SetIndexBuffer(indexBuffer); 
 }
+
+RTestMesh::RTestMesh()
+    : fVertexArray(nullptr)
+{
+    
+}
+
+RTestMesh::~RTestMesh()
+{
+    /*for (Graphics::GVertexArray* array : fVertexArray)
+    {
+        delete array;
+    }
+    fVertexArray.clear();*/
+    if (fVertexArray)
+    {
+        delete fVertexArray;
+        fVertexArray = nullptr;
+    }
+}
+
+void RTestMesh::SetData(const std::vector<Vertex>& vertices)
+{
+    fVertices = vertices;
+
+    UpdateBuffers();
+}
+
+void RTestMesh::OnRender(Graphics::GContext* context)
+{
+    /*if (fVertexArray.size() != fVertices.size())
+    {
+        return;
+    }
+
+    for (size_t i = 0; i < fVertexArray.size(); i++)
+    {
+        Graphics::GVertexArray* vertexArray = fVertexArray[i];
+        size_t count = fVertices[i].size();
+
+        vertexArray->Bind();
+
+
+        context->DrawArrays(0, count, Graphics::GDrawMode::TRIANGLE_FAN);
+        
+        vertexArray->Unbind();
+    }*/
+
+    fVertexArray->Bind();
+    context->DrawArrays(0, fVertices.size(), Graphics::GDrawMode::TRIANGLE_FAN);
+    fVertexArray->Unbind();
+}
+
+void RTestMesh::UpdateBuffers()
+{
+    if (fVertexArray)
+    {
+        delete fVertexArray;
+        fVertexArray = nullptr;
+    }
+    fVertexArray = GetSingleBuffer(fVertices);
+    /*for (Graphics::GVertexArray* array : fVertexArray)
+    {
+        delete array;
+    }
+    fVertexArray.clear();
+    fVertexArray.resize(0);
+
+    for (const std::vector<Vertex>& vertices : fVertices)
+    {
+        fVertexArray.push_back(GetSingleBuffer(vertices));
+    }*/
+}
+
+Graphics::GVertexArray* RTestMesh::GetSingleBuffer(const std::vector<Vertex>& vertices)
+{
+    Graphics::GVertexArray* resultVertexArray = Graphics::Wrapper::CreateVertexArray();
+
+    Graphics::GVertexBuffer* vertexBuffer = Graphics::Wrapper::CreateVertexBuffer();
+    vertexBuffer->SetData((unsigned char*) fVertices.data(), fVertices.size() * sizeof(Vertex));
+
+    vertexBuffer->SetLayout({
+        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Position"),
+        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Normal")
+    });
+
+    resultVertexArray->AddVertexBuffer(vertexBuffer);
+
+    return resultVertexArray;
+}
