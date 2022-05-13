@@ -31,5 +31,15 @@ void RScene::DeleteObject(RObject* object)
 {
     if (!object) { printf("WARN: Could not delete object. It was allready destroyed!"); return; }
     object->GetParent()->RemoveChild(object);
+    if (fObjectDeleteFunc)
+    {
+        fObjectDeleteFunc(object);
+    }
     delete object;
+}
+
+
+void RScene::SetObjectDeleteFunction(TObjectDeleteFunc func)
+{
+    fObjectDeleteFunc = func;
 }

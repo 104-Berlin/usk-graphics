@@ -124,6 +124,15 @@ void RObject::Clear()
     fChildren.clear();
 }
 
+RObject* RObject::GetChildAt(size_t index) const
+{
+    if (index < fChildren.size())
+    {
+        return fChildren[index];
+    }
+    return nullptr;
+}
+
 const std::vector<RObject*>& RObject::GetChildren() const
 {
     return fChildren;
