@@ -13,8 +13,8 @@ namespace Renderer {
 
         Graphics::GVertexArray*     fVertexArray;
 
-        RGrid(unsigned int columnCount, unsigned int rowCount, float width = 100.0f, float height = 100.0f);
     public:
+        RGrid(unsigned int columnCount, unsigned int rowCount, float width = 100.0f, float height = 100.0f);
         virtual ~RGrid();
 
         virtual void OnRender(Graphics::GContext* context) override;
