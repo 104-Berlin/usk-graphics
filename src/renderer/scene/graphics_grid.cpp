@@ -2,13 +2,13 @@
 
 using namespace Renderer;
 
-RGid::RGid(unsigned int columnCount, unsigned int rowCount, float width, float height)
+RGrid::RGrid(unsigned int columnCount, unsigned int rowCount, float width, float height)
     : fColumnCount(columnCount), fRowCount(rowCount), fWidth(width), fHeight(height), fVertexArray(nullptr)
 {
     UpdateBuffers();
 }
 
-RGid::~RGid()
+RGrid::~RGrid()
 {
     if (fVertexArray)
     {
@@ -17,7 +17,7 @@ RGid::~RGid()
     }
 }
 
-void RGid::OnRender(Graphics::GContext* context)
+void RGrid::OnRender(Graphics::GContext* context)
 {
     if (!fVertexArray)
     {
@@ -32,7 +32,7 @@ void RGid::OnRender(Graphics::GContext* context)
     fVertexArray->Unbind();
 }
 
-void RGid::UpdateBuffers()
+void RGrid::UpdateBuffers()
 {
     if (fVertexArray)
     {
@@ -56,7 +56,7 @@ void RGid::UpdateBuffers()
     fVertexArray->AddVertexBuffer(vertexBuffer);
 }
 
-std::vector<glm::vec3> RGid::GenerateVertices()
+std::vector<glm::vec3> RGrid::GenerateVertices()
 {
     std::vector<glm::vec3> vertices;
 

@@ -2,7 +2,7 @@
 
 namespace Renderer {
 
-    class RGid : public RObject
+    class RGrid : public RObject
     {
     private:
         unsigned int fColumnCount;
@@ -12,9 +12,10 @@ namespace Renderer {
         float fHeight;
 
         Graphics::GVertexArray*     fVertexArray;
+
+        RGrid(unsigned int columnCount, unsigned int rowCount, float width = 100.0f, float height = 100.0f);
     public:
-        RGid(unsigned int columnCount, unsigned int rowCount, float width = 100.0f, float height = 100.0f);
-        virtual ~RGid();
+        virtual ~RGrid();
 
         virtual void OnRender(Graphics::GContext* context) override;
 
