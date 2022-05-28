@@ -124,6 +124,12 @@ void RObject::Clear()
     fChildren.clear();
 }
 
+
+size_t RObject::GetChildCount() const
+{
+    return fChildren.size();
+}
+
 RObject* RObject::GetChildAt(size_t index) const
 {
     if (index < fChildren.size())

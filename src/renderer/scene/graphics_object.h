@@ -39,6 +39,7 @@ namespace Renderer {
         void Attach(RObject* object);
 
         void Clear();
+        size_t GetChildCount() const;
         RObject* GetChildAt(size_t index) const;
         const std::vector<RObject*>& GetChildren() const;
 
