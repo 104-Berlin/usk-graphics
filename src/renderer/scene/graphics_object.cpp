@@ -154,6 +154,22 @@ void RObject::Render(Graphics::GContext* context)
     OnRender(context);
 }
 
+void RObject::SetParent(RObject* object, bool addAsChild)
+{
+    if (!addAsChild)
+    {
+        if (fParent)
+        {
+            fParent->RemoveChild(this);
+        }
+        fParent = object;
+    }
+    else
+    {
+        object->Add(this);
+    }
+}
+
 void RObject::RemoveChild(RObject* object) 
 {
     std::vector<RObject*>::iterator it = std::find(fChildren.begin(), fChildren.end(), object);
