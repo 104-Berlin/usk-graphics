@@ -50,18 +50,17 @@ void RLine::RegenVertices()
     glm::vec3 direction = glm::normalize(fStart - fEnd);
     glm::vec3 offsetVector = glm::normalize(glm::cross(direction, upVector));
 
-    fVertices.clear();
-    fIndices.clear();
-    fVertices.push_back({fStart - (offsetVector * halfWidth)});
-    fVertices.push_back({fStart + (offsetVector * halfWidth)});
-    fVertices.push_back({fEnd + (offsetVector * halfWidth)});
-    fVertices.push_back({fEnd - (offsetVector * halfWidth)});
+    fMeshData.Vertices.clear();
+    fMeshData.Indices.clear();
+    fMeshData.Vertices.push_back({fStart - (offsetVector * halfWidth)});
+    fMeshData.Vertices.push_back({fStart + (offsetVector * halfWidth)});
+    fMeshData.Vertices.push_back({fEnd + (offsetVector * halfWidth)});
+    fMeshData.Vertices.push_back({fEnd - (offsetVector * halfWidth)});
     
-    fIndices = {
+    fMeshData.Indices = {
         0, 1, 2,
         2, 3, 0
     };
-    fIndexCount = fIndices.size();
 
     UpdateBuffers();
 }

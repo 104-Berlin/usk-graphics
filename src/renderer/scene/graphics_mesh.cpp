@@ -4,7 +4,7 @@ using namespace Renderer;
 
 
 RMesh::RMesh() 
-    : fVertexArray(nullptr), fIndexCount(0)
+    : fVertexArray(nullptr)
 {
     
 }
@@ -20,9 +20,8 @@ RMesh::~RMesh()
 
 void RMesh::SetData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) 
 {
-    fVertices = vertices;
-    fIndices = indices;
-    fIndexCount = indices.size();
+    fMeshData.Vertices = vertices;
+    fMeshData.Indices = indices;
 
     UpdateBuffers();
 }
@@ -37,7 +36,7 @@ void RMesh::BindToDraw()
 
 size_t RMesh::GetIndexCount() const
 {
-    return fIndexCount;
+    return fMeshData.Indices.size();
 }
 
 void RMesh::OnRender(Graphics::GContext* context) 
@@ -64,7 +63,7 @@ void RMesh::UpdateBuffers()
     fVertexArray = Graphics::Wrapper::CreateVertexArray();
 
     Graphics::GVertexBuffer* vertexBuffer = Graphics::Wrapper::CreateVertexBuffer();
-    vertexBuffer->SetData((unsigned char*) fVertices.data(), fVertices.size() * sizeof(Vertex));
+    vertexBuffer->SetData((unsigned char*) fMeshData.Vertices.data(), fMeshData.Vertices.size() * sizeof(Vertex));
 
     vertexBuffer->SetLayout({
         Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Position"),
@@ -72,7 +71,7 @@ void RMesh::UpdateBuffers()
     });
 
     Graphics::GIndexBuffer* indexBuffer = Graphics::Wrapper::CreateIndexBuffer();
-    indexBuffer->SetData((unsigned char*)fIndices.data(), fIndices.size() * sizeof(unsigned int), sizeof(unsigned int));
+    indexBuffer->SetData((unsigned char*)fMeshData.Indices.data(), fMeshData.Indices.size() * sizeof(unsigned int), sizeof(unsigned int));
 
     fVertexArray->AddVertexBuffer(vertexBuffer);
     fVertexArray->SetIndexBuffer(indexBuffer); 

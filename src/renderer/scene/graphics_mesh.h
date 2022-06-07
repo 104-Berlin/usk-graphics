@@ -10,10 +10,15 @@ namespace Renderer {
             glm::vec3 Position;
             glm::vec3 Normal;
         };
+
+        struct Data
+        {
+            std::vector<Vertex>         Vertices;
+            std::vector<unsigned int>   Indices;
+        };
+
     protected:
-        std::vector<Vertex>         fVertices;
-        std::vector<unsigned int>   fIndices;
-        size_t                      fIndexCount;
+        Data                        fMeshData;
 
         Graphics::GVertexArray*     fVertexArray;
     public:

@@ -119,8 +119,8 @@ int RBezierCurve::GetSteps() const
 
 void RBezierCurve::RegenMesh() 
 {
-    fVertices.clear();
-    fIndices.clear();
+    fMeshData.Vertices.clear();
+    fMeshData.Indices.clear();
 
     unsigned int indexCounter = 0;
 
@@ -141,17 +141,17 @@ void RBezierCurve::RegenMesh()
         glm::vec3 nextNormal = GetCurveNormal(t);
 
         
-        fVertices.push_back({currentPoint - (currentNormal * halfWidth)});
-        fVertices.push_back({currentPoint + (currentNormal * halfWidth)});
-        fVertices.push_back({nextPosition + (nextNormal * halfWidth)});
-        fVertices.push_back({nextPosition - (nextNormal * halfWidth)});
+        fMeshData.Vertices.push_back({currentPoint - (currentNormal * halfWidth)});
+        fMeshData.Vertices.push_back({currentPoint + (currentNormal * halfWidth)});
+        fMeshData.Vertices.push_back({nextPosition + (nextNormal * halfWidth)});
+        fMeshData.Vertices.push_back({nextPosition - (nextNormal * halfWidth)});
 
-        fIndices.push_back(indexCounter);
-        fIndices.push_back(indexCounter + 1);
-        fIndices.push_back(indexCounter + 2);
-        fIndices.push_back(indexCounter + 2);
-        fIndices.push_back(indexCounter + 3);
-        fIndices.push_back(indexCounter);
+        fMeshData.Indices.push_back(indexCounter);
+        fMeshData.Indices.push_back(indexCounter + 1);
+        fMeshData.Indices.push_back(indexCounter + 2);
+        fMeshData.Indices.push_back(indexCounter + 2);
+        fMeshData.Indices.push_back(indexCounter + 3);
+        fMeshData.Indices.push_back(indexCounter);
 
         indexCounter += 4;
 
@@ -163,7 +163,6 @@ void RBezierCurve::RegenMesh()
             break;
         }
     }
-    fIndexCount = fIndices.size();
     UpdateBuffers();
 }
 
