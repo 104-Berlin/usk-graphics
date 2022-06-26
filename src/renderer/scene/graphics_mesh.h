@@ -9,6 +9,12 @@ namespace Renderer {
         {
             glm::vec3 Position;
             glm::vec3 Normal;
+
+            Vertex(const glm::vec3& position = glm::vec3(0.0f), const glm::vec3& normal = glm::vec3(0.0f, 0.0f, 1.0f))
+                : Position(position), Normal(normal)
+            {
+
+            }
         };
 
         struct Data
