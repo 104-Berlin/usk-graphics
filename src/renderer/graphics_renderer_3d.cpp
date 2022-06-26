@@ -36,6 +36,12 @@ const vec3 light_direction = vec3(0.7, 0.9, 0.8);
 
 void main()
 {
+    if (length(currentNormal) == 0.0)
+    {
+        fColor = vec4(1.0, 1.0, 1.0, 1.0);
+        fNormal = vec3(0.0, 0.0, 0.0);
+        return;
+    }
     float diffuse = max(dot(normalize(currentNormal), normalize(light_direction)), 0.2);
     fColor = vec4((vec3(1.0, 1.0, 1.0) * diffuse), 1);
     fNormal = (normalize(currentNormal) + vec3(1.0, 1.0, 1.0)) / 2.0;

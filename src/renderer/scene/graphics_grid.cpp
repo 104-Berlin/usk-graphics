@@ -42,13 +42,14 @@ void RGrid::UpdateBuffers()
 
     fVertexArray = Graphics::Wrapper::CreateVertexArray();
 
-    std::vector<glm::vec3> vertices = GenerateVertices();
+    std::vector<RMesh::Vertex> vertices = GenerateVertices();
 
     Graphics::GVertexBuffer* vertexBuffer = Graphics::Wrapper::CreateVertexBuffer();
-    vertexBuffer->SetData((unsigned char*) vertices.data(), vertices.size() * sizeof(glm::vec3));
+    vertexBuffer->SetData((unsigned char*) vertices.data(), vertices.size() * sizeof(RMesh::Vertex));
 
     vertexBuffer->SetLayout({
-        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Position")
+        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Position"),
+        Graphics::GBufferElement(Graphics::GShaderDataType::Float3, "Normal")
     });
 
     Graphics::GIndexBuffer* indexBuffer = Graphics::Wrapper::CreateIndexBuffer();
@@ -56,19 +57,19 @@ void RGrid::UpdateBuffers()
     fVertexArray->AddVertexBuffer(vertexBuffer);
 }
 
-std::vector<glm::vec3> RGrid::GenerateVertices()
+std::vector<RMesh::Vertex> RGrid::GenerateVertices()
 {
-    std::vector<glm::vec3> vertices;
+    std::vector<RMesh::Vertex> vertices;
 
     for (unsigned int i = 0; i < fColumnCount; i++)
     {
-        vertices.push_back(glm::vec3(i * fWidth, 0.0f, 0.0f));
-        vertices.push_back(glm::vec3(i * fWidth, fRowCount * fHeight, 0.0f));
+        vertices.push_back(RMesh::Vertex(glm::vec3(i * fWidth, 0.0f, 0.0f), glm::vec3(0.0f)));
+        vertices.push_back(RMesh::Vertex(glm::vec3(i * fWidth, fRowCount * fHeight, 0.0f), glm::vec3(0.0f)));
     }
     for (unsigned int j = 0; j < fRowCount; j++)
     {
-        vertices.push_back(glm::vec3(0.0f, j * fHeight, 0.0f));
-        vertices.push_back(glm::vec3(fColumnCount * fWidth, j * fHeight, 0.0f));
+        vertices.push_back(RMesh::Vertex(glm::vec3(0.0f, j * fHeight, 0.0f), glm::vec3(0.0f)));
+        vertices.push_back(RMesh::Vertex(glm::vec3(fColumnCount * fWidth, j * fHeight, 0.0f), glm::vec3(0.0f)));
     }
 
     return vertices;

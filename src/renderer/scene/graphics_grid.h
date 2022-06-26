@@ -21,7 +21,7 @@ namespace Renderer {
 
     private:
         void UpdateBuffers();
-        std::vector<glm::vec3> GenerateVertices();
+        std::vector<RMesh::Vertex> GenerateVertices();
     };
 
 }
