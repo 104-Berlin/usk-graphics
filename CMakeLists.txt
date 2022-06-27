@@ -44,22 +44,22 @@ target_include_directories(ImGui PUBLIC deps/imgui
                                         deps/imguizmo)
 
 # Uncomment this if you want the ImGuizmo Example. Only works on windows!
-add_executable(ImGuizmoExample  deps/imguizmo/example/main.cpp
-                                deps/imguizmo/ImGuizmo.cpp
-                                deps/imguizmo/ImCurveEdit.cpp
-                                deps/imguizmo/ImGradient.cpp
-                                deps/imguizmo/ImSequencer.cpp
-                                deps/imguizmo/GraphEditor.cpp
-                                deps/imguizmo/ImCurveEdit.cpp
-                                deps/imguizmo/example/imgui_demo.cpp
-                                deps/imguizmo/example/imgui_draw.cpp
-                                deps/imguizmo/example/imgui_tables.cpp
-                                deps/imguizmo/example/imgui_widgets.cpp
-                                deps/imguizmo/example/imgui.cpp)
+#add_executable(ImGuizmoExample  deps/imguizmo/example/main.cpp
+#                                deps/imguizmo/ImGuizmo.cpp
+#                                deps/imguizmo/ImCurveEdit.cpp
+#                                deps/imguizmo/ImGradient.cpp
+#                                deps/imguizmo/ImSequencer.cpp
+#                                deps/imguizmo/GraphEditor.cpp
+#                                deps/imguizmo/ImCurveEdit.cpp
+#                                deps/imguizmo/example/imgui_demo.cpp
+#                                deps/imguizmo/example/imgui_draw.cpp
+#                                deps/imguizmo/example/imgui_tables.cpp
+#                                deps/imguizmo/example/imgui_widgets.cpp
+#                                deps/imguizmo/example/imgui.cpp)
 
 
-target_include_directories(ImGuizmoExample PUBLIC deps/imguizmo
-                                                  deps/imguizmo/example)          
+#target_include_directories(ImGuizmoExample PUBLIC deps/imguizmo
+#                                                  deps/imguizmo/example)          
                             
 
 add_subdirectory(src/interface)
