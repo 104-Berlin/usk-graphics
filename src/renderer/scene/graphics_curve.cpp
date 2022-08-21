@@ -2,7 +2,112 @@
 
 using namespace Renderer;
 
-RBezierCurve::RBezierCurve() 
+RBezierCurve::RBezierCurve()
+    : fThickness(1.0f), fStepsPerCurve(12), fIsDirty(false)
+{
+    
+}
+
+void RBezierCurve::SetSegments(const std::vector<CurveSegment>& segments)
+{
+    fCurveSegments = segments;
+    RegenMesh();    
+}
+
+void RBezierCurve::SetThickness(float thickness)
+{
+    fThickness = thickness;
+}
+ 
+float RBezierCurve::GetThickness() const
+{
+    return fThickness;
+}
+
+void RBezierCurve::SetSteps(int steps)
+{
+    fStepsPerCurve = steps;
+}
+
+int RBezierCurve::GetSteps() const
+{
+    return fStepsPerCurve;
+}
+
+void RBezierCurve::RegenMesh()
+{
+    fMeshData.Vertices.clear();
+    fMeshData.Indices.clear();
+
+    unsigned int indexCounter = 0;
+
+    float halfWidth = fThickness / 2.0f;
+    float step = 1.0f / (float)abs(fStepsPerCurve);
+
+    for (const CurveSegment& segment : fCurveSegments)
+    {
+        float t = step;
+        glm::vec3 currentPoint = GetCurvePoint(segment, 0.0f);
+        glm::vec3 currentNormal = GetCurveNormal(segment, 0.0f);
+        bool breakLoop = false;
+        while (true)
+        {
+            if (t > 1.0f) 
+            {
+                t = 1.0f;
+                breakLoop = true;
+            }
+            glm::vec3 nextPosition = GetCurvePoint(segment, t);
+            glm::vec3 nextNormal = GetCurveNormal(segment, t);
+
+            
+            fMeshData.Vertices.push_back({currentPoint - (currentNormal * halfWidth)});
+            fMeshData.Vertices.push_back({currentPoint + (currentNormal * halfWidth)});
+            fMeshData.Vertices.push_back({nextPosition + (nextNormal * halfWidth)});
+            fMeshData.Vertices.push_back({nextPosition - (nextNormal * halfWidth)});
+
+            fMeshData.Indices.push_back(indexCounter);
+            fMeshData.Indices.push_back(indexCounter + 1);
+            fMeshData.Indices.push_back(indexCounter + 2);
+            fMeshData.Indices.push_back(indexCounter + 2);
+            fMeshData.Indices.push_back(indexCounter + 3);
+            fMeshData.Indices.push_back(indexCounter);
+
+            indexCounter += 4;
+
+            currentPoint = nextPosition;
+            currentNormal = nextNormal;
+            t += step;
+            if (breakLoop)
+            {
+                break;
+            }
+        }
+    }
+
+    UpdateBuffers();
+}
+
+glm::vec3 RBezierCurve::GetCurvePoint(const CurveSegment& seg, float t)
+{
+    return  (seg.Start * (-(t*t*t) + (3*t*t) - (3*t) + 1)) +
+        (seg.Controll1 * ((3*t*t*t) - (6*t*t) + (3*t))) + 
+        (seg.Controll2 * (-(3*t*t*t) + (3*t*t))) + 
+        (seg.End * (t*t*t));
+}
+
+glm::vec3 RBezierCurve::GetCurveNormal(const CurveSegment& seg, float t)
+{
+    const glm::vec3 upVector(0.0f, 0.0f, 1.0f);
+    glm::vec3 forwardVector = (seg.Start * (-(3*t*t) + (6*t) -3)) + 
+                                (seg.Controll1 * ((9*t*t) - (12*t) + 3)) + 
+                                (seg.Controll2 * (-(9*t*t) + (6*t))) + 
+                                (seg.End * (3*t*t));
+
+    return glm::normalize(glm::cross(glm::normalize(forwardVector), upVector));
+}
+
+RBezierCurveEdit::RBezierCurveEdit() 
     : RMesh(), fThickness(3.0f), fSteps(10.0f)
 {
     fStartPosition = new RObject();
@@ -17,7 +122,7 @@ RBezierCurve::RBezierCurve()
     RegenMesh();
 }
 
-RBezierCurve::~RBezierCurve()
+RBezierCurveEdit::~RBezierCurveEdit()
 {
     delete fStartPosition;
     delete fEndPosition;
@@ -25,99 +130,99 @@ RBezierCurve::~RBezierCurve()
     delete fControllPoint2;
 }
 
-void RBezierCurve::SetStartPos(const glm::vec3& pos) 
+void RBezierCurveEdit::SetStartPos(const glm::vec3& pos) 
 {
     if (fStartPosition->GetPosition() == pos) { return; }
     fStartPosition->SetPosition(pos);
     RegenMesh();
 }
 
-const glm::vec3& RBezierCurve::GetStartPos() const
+const glm::vec3& RBezierCurveEdit::GetStartPos() const
 {
     return fStartPosition->GetPosition();
 }
 
-RObject* RBezierCurve::GetStartPositionObject() const
+RObject* RBezierCurveEdit::GetStartPositionObject() const
 {
     return fStartPosition;
 }
 
-void RBezierCurve::SetEndPos(const glm::vec3& pos) 
+void RBezierCurveEdit::SetEndPos(const glm::vec3& pos) 
 {
     if (fEndPosition->GetPosition() == pos) { return; }
     fEndPosition->SetPosition(pos);
     RegenMesh();
 }
 
-const glm::vec3& RBezierCurve::GetEndPos() const
+const glm::vec3& RBezierCurveEdit::GetEndPos() const
 {
     return fEndPosition->GetPosition();
 }
 
-RObject* RBezierCurve::GetEndPositionObject() const
+RObject* RBezierCurveEdit::GetEndPositionObject() const
 {
     return fEndPosition;
 }
 
-void RBezierCurve::SetControll1(const glm::vec3& pos) 
+void RBezierCurveEdit::SetControll1(const glm::vec3& pos) 
 {
     if (fControllPoint1->GetPosition() == pos) { return; }
     fControllPoint1->SetPosition(pos);
     RegenMesh();
 }
 
-const glm::vec3& RBezierCurve::GetControll1() const
+const glm::vec3& RBezierCurveEdit::GetControll1() const
 {
     return fControllPoint1->GetPosition();
 }
 
-RObject* RBezierCurve::GetControllPoint1Object() const
+RObject* RBezierCurveEdit::GetControllPoint1Object() const
 {
     return fControllPoint1;
 }
 
-void RBezierCurve::SetControll2(const glm::vec3& pos) 
+void RBezierCurveEdit::SetControll2(const glm::vec3& pos) 
 {
     if (fControllPoint2->GetPosition() == pos) { return; }
     fControllPoint2->SetPosition(pos);
     RegenMesh();
 }
 
-const glm::vec3& RBezierCurve::GetControll2() const
+const glm::vec3& RBezierCurveEdit::GetControll2() const
 {
     return fControllPoint2->GetPosition();
 }
 
-RObject* RBezierCurve::GetControllPoint2Object() const
+RObject* RBezierCurveEdit::GetControllPoint2Object() const
 {
     return fControllPoint2;
 }
 
-void RBezierCurve::SetThickness(float thickness) 
+void RBezierCurveEdit::SetThickness(float thickness) 
 {
     if (fThickness == thickness) { return; }
     fThickness = thickness;
     RegenMesh();
 }
 
-float RBezierCurve::GetThickness() const
+float RBezierCurveEdit::GetThickness() const
 {
     return fThickness;
 }
 
-void RBezierCurve::SetSteps(int steps) 
+void RBezierCurveEdit::SetSteps(int steps) 
 {
     if (fSteps == steps) { return; }
     fSteps = steps;
     RegenMesh();
 }
 
-int RBezierCurve::GetSteps() const
+int RBezierCurveEdit::GetSteps() const
 {
     return fSteps;
 }
 
-void RBezierCurve::RegenMesh() 
+void RBezierCurveEdit::RegenMesh() 
 {
     fMeshData.Vertices.clear();
     fMeshData.Indices.clear();
@@ -166,7 +271,7 @@ void RBezierCurve::RegenMesh()
     UpdateBuffers();
 }
 
-glm::vec3 RBezierCurve::GetCurvePoint(float t) 
+glm::vec3 RBezierCurveEdit::GetCurvePoint(float t) 
 {
     return  (GetStartPos() * (-(t*t*t) + (3*t*t) - (3*t) + 1)) +
             (GetControll1() * ((3*t*t*t) - (6*t*t) + (3*t))) + 
@@ -174,7 +279,7 @@ glm::vec3 RBezierCurve::GetCurvePoint(float t)
             (GetEndPos() * (t*t*t));
 }
 
-glm::vec3 RBezierCurve::GetCurveNormal(float t) 
+glm::vec3 RBezierCurveEdit::GetCurveNormal(float t) 
 {
     const glm::vec3 upVector(0.0f, 0.0f, 1.0f);
     glm::vec3 forwardVector = (GetStartPos() * (-(3*t*t) + (6*t) -3)) + 
